@@ -1,3 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Urbanist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+	font-family: 'Urbanist', sans-serif;
+}
+
+.button {
+	padding: 0 30px;
+	min-width: 100px;
+	border-radius: 50px;
+	border: none;
+	font-family: 'Urbanist', sans-serif;
+	font-weight: bold;
+	background-color: rgb(20, 233, 159);
+	transition: transform .2s;
+	cursor: pointer;
+}
+
+.button:hover {
+	transform: translateY(-2px);
+}
+
+.button:active {
+	transform: translateY(2px);
+
+}
+
 #root {
-  color: red;
+	color: #2b2b2b;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+
+	max-width: 1200px;
+	margin: 0px auto;
+	padding-top: 50px;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0px auto;
+	padding: 0 20px;
+}
+
+.header {
+	/* height: 600px; */
+	color: white;
+}
+
+.top-line {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.main-menu {
+	display: flex;
+	list-style-type: none;
+}
+
+.menu-item {
+	margin: 0 40px;
+}
+
+.menu-link {
+	text-decoration: none;
+	color: inherit;
+}
+
+.card-wrapper {
+	width: 350px;
+	height: 550px;
+	margin: 0 10px 30px 10px;
+	box-shadow: 0px 0px 38px -20px rgba(34, 60, 80, 0.56);
+}
+
+.episode-wrapper {
+	min-height: 80px;
+	padding: 0 20px;
+	border-bottom: 2px solid #e8e8e8;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.episode-name {
+	font-family: 'Urbanist', sans-serif;
+}
+
+.show-info {
+	display: flex;
+	padding: 100px 0;
+}
+
+.show-info-content {
+	display: flex;
+	flex-direction: column;
+
+}
+
+#showName {
+	font-size: 40px;
+	font-family: 'Urbanist', sans-serif;
+
+}
+
+#showPoster {
+	margin-right: 30px;
+	max-width: 210px;
+}
+
+.episode-selector {
+	display: flex;
+}
+
+.search-box {
+	margin: 0 20px;
+}
+
+#episodeSelector,
+#searchBoxInput {
+	border: none;
+	padding: 2px;
+	width: 280px;
+}
+
+#episodeSelector {
+	height: 44px;
+}
+
+#searchBoxInput {
+	height: 40px;
+	padding-left: 20px;
+	margin-right: 10px;
+}
+
+#searchResult {
+	font-family: 'Urbanist', sans-serif;
+	font-size: 24px;
+	padding: 30px 0;
 }

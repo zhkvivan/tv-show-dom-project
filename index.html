@@ -6,19 +6,54 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>TV Show Project | Ivan (zhkvivan)</title>
 	<link href="style.css" rel="stylesheet" />
+	<link href="normalize.css" rel="stylesheet" />
+
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 </head>
 
 <body>
-	<div class="search-box">
-		<input type="text" name="" id="searchBoxInput">
+	<div class="header">
+		<div class="container">
+			<div class="top-line">
+				<h1>TV-DOM-PROJECT</h1>
+				<nav>
+					<ul class="main-menu">
+						<li class="menu-item"><a href="#" class="menu-link">Films</a></li>
+						<li class="menu-item"><a href="#" class="menu-link">TV-Shows</a></li>
+						<li class="menu-item"><a href="#" class="menu-link">Contacts</a></li>
+					</ul>
+				</nav>
+
+			</div>
+			<div class="show-info">
+				<img src="" alt="" id='showPoster'>
+				<div class="show-info-content">
+					<h2 id="showName"></h2>
+					<p id="showSummary"></p>
+					<div class="episode-selector">
+						<div class="selector-box">
+							<select id="episodeSelector">
+								<option selected disabled value="chooseAnEpisode">Choose an episode</option>
+							</select>
+						</div>
+						<div class="search-box">
+							<input type="text" name="" id="searchBoxInput" placeholder="Enter keyword">
+							
+						</div>
+						<button class="button" id="clearButton">Clear filter</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+	<div class="container" id='searchResult'></div>
 	<div id="root">
 
 	</div>
 
 	<!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
 	<script src="episodes.js"></script>
+	<script src="shows.js"></script>
 
 	<!-- Loads YOUR javascript code -->
 	<script src="script.js"></script>
