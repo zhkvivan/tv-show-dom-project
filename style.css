@@ -1,34 +1,67 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Urbanist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+:root {
+	--main-accent: rgb(20, 233, 159);
+}
 
-
+html {
+	scroll-behavior: smooth;
+}
 
 body {
 	font-family: 'Open Sans', sans-serif;
+}
+
+#logo {
+	font-family: 'Urbanist', sans-serif;
+	font-weight: bold;
+	font-size: 34px;
+	margin-top: 20px;
 }
 
 h1 {
 	font-family: 'Urbanist', sans-serif;
 }
 
+h2 {
+	margin: 0;
+}
+
 .button {
 	padding: 0 30px;
-	min-width: 100px;
+	min-width: 170px;
 	border-radius: 50px;
 	border: none;
 	font-family: 'Urbanist', sans-serif;
 	font-weight: bold;
-	background-color: rgb(20, 233, 159);
-	transition: transform .2s;
+	color: black;
+	background-color: var(--main-accent);
+	transition: all 0.2s;
 	cursor: pointer;
+	height: 44px;
+}
+
+.button > i {
+	margin-left: 10px;
 }
 
 .button:hover {
-	transform: translateY(-2px);
+	background-color: rgb(101, 254, 200);
 }
 
 .button:active {
 	transform: translateY(2px);
+}
 
+select {
+	cursor: pointer;
+}
+
+select:focus-visible,
+input:focus-visible {
+	outline: none;
+	border: none;
+	border-radius: 50px;
+	box-shadow: 0 0 0 2px var(--main-accent);
 }
 
 #root {
@@ -37,20 +70,17 @@ h1 {
 	flex-direction: row;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
-
-	max-width: 1200px;
+	max-width: 1486px;
 	margin: 0px auto;
-	padding-top: 50px;
 }
 
 .container {
-	max-width: 1200px;
+	max-width: 1486px;
 	margin: 0px auto;
 	padding: 0 20px;
 }
 
 .header {
-	/* height: 600px; */
 	color: white;
 }
 
@@ -75,11 +105,159 @@ h1 {
 	color: inherit;
 }
 
+.show-info {
+	display: flex;
+	padding: 100px 0;
+}
+
+.show-info-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#showName {
+	font-size: 40px;
+	font-family: 'Urbanist', sans-serif;
+}
+
+.genre-tag {
+	color: var(--main-accent);
+	text-decoration: none;
+	margin-right: 10px;
+}
+
+#showPoster {
+	margin-right: 80px;
+	width: 300px;
+	height: 441px;
+}
+
+#showSummary {
+	max-width: 900px;
+}
+
+.show-selector-wrapper {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30px;
+}
+
+#showSelector {
+	height: 44px;
+	padding: 0 10px;
+	background: none;
+	border: 2px solid white;
+	border-radius: 50px;
+	color: white;
+}
+
+#showSelector > option {
+}
+
+.show-selector-desc {
+	margin: 0 20px;
+}
+
+.similar-shows {
+	padding: 50px 0;
+	color: white;
+	background-color: #121930;
+}
+
+.similar-shows-top-line {
+	display: flex;
+	justify-content: space-between;
+}
+
+.similar-shows h2 {
+	font-family: 'Urbanist', sans-serif;
+	font-size: 26px;
+	font-weight: bold;
+	margin-bottom: 30px;
+	margin-top: 0;
+}
+
+.similar-shows-wrapper {
+	display: flex;
+	margin: 0 -30.5px;
+	justify-content: space-between;
+}
+
+.similar-shows-item {
+	display: flex;
+	flex-direction: column;
+	margin: 0 30.5px;
+}
+
+.similar-show-img {
+	width: 160px;
+}
+
+.similar-show-info {
+	font-size: 13px;
+	margin: 8px 0;
+}
+
+.similar-show-name {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#filter {
+	padding: 100px 0;
+}
+
+
+
+.episode-selector {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.search-box {
+	margin-right: 20px;
+}
+
+#episodeSelector,
+#searchBoxInput {
+	/* border: none; */
+	border: 2px solid #121930;
+	border-radius: 50px;
+	padding: 2px;
+	width: 280px;
+}
+
+#episodeSelector {
+	height: 44px;
+	padding: 0 10px;
+}
+
+#searchBoxInput {
+	height: 40px;
+	padding-left: 20px;
+	margin-right: 10px;
+}
+
+.search-result {
+	/* font-family: 'Urbanist', sans-serif; */
+	font-size: 24px;
+	margin: 0 20px;
+}
+
 .card-wrapper {
 	width: 350px;
 	height: 550px;
 	margin: 0 10px 30px 10px;
 	box-shadow: 0px 0px 38px -20px rgba(34, 60, 80, 0.56);
+	transition: transform .3s;
+	cursor: pointer;
+}
+
+.card-wrapper:hover {
+	transform: scale(1.03);
+	
 }
 
 .episode-wrapper {
@@ -98,55 +276,28 @@ h1 {
 	font-family: 'Urbanist', sans-serif;
 }
 
-.show-info {
-	display: flex;
-	padding: 100px 0;
+.episode-image-wrapper {
+	width: 350px;
+	height: 196px;
+	overflow: hidden;
 }
 
-.show-info-content {
-	display: flex;
-	flex-direction: column;
-
+.episode-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
 }
 
-#showName {
-	font-size: 40px;
-	font-family: 'Urbanist', sans-serif;
-
+.episode-description {
+	padding: 30px;
+	line-height: 22px;
 }
 
-#showPoster {
-	margin-right: 30px;
-	max-width: 210px;
+.episode-description p {
+	margin: 0;
 }
 
-.episode-selector {
-	display: flex;
-}
-
-.search-box {
-	margin: 0 20px;
-}
-
-#episodeSelector,
-#searchBoxInput {
-	border: none;
-	padding: 2px;
-	width: 280px;
-}
-
-#episodeSelector {
-	height: 44px;
-}
-
-#searchBoxInput {
-	height: 40px;
-	padding-left: 20px;
-	margin-right: 10px;
-}
-
-#searchResult {
-	font-family: 'Urbanist', sans-serif;
-	font-size: 24px;
-	padding: 30px 0;
+.episode-description a {
+	color: inherit;
 }

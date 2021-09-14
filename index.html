@@ -7,6 +7,7 @@
 	<title>TV Show Project | Ivan (zhkvivan)</title>
 	<link href="style.css" rel="stylesheet" />
 	<link href="normalize.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 </head>
@@ -15,7 +16,7 @@
 	<div class="header">
 		<div class="container">
 			<div class="top-line">
-				<h1>TV-DOM-PROJECT</h1>
+				<span id="logo">TV-SHOW-PROJECT</span>
 				<nav>
 					<ul class="main-menu">
 						<li class="menu-item"><a href="#" class="menu-link">Films</a></li>
@@ -23,36 +24,116 @@
 						<li class="menu-item"><a href="#" class="menu-link">Contacts</a></li>
 					</ul>
 				</nav>
-
 			</div>
 			<div class="show-info">
 				<img src="" alt="" id='showPoster'>
 				<div class="show-info-content">
-					<h2 id="showName"></h2>
-					<p id="showSummary"></p>
-					<div class="episode-selector">
-						<div class="selector-box">
-							<select id="episodeSelector">
-								<option selected disabled value="chooseAnEpisode">Choose an episode</option>
-							</select>
-						</div>
-						<div class="search-box">
-							<input type="text" name="" id="searchBoxInput" placeholder="Enter keyword">
-							
-						</div>
-						<button class="button" id="clearButton">Clear filter</button>
+					<div>
+						<h1 id="showName"></h1>
+						<div class="genres"></div>
+						<p id="showSummary"></p>
 					</div>
+					<div>
+						<form><button class="button" type="submit" formaction=#filter>Go to
+								episodes<i class="fa fa-arrow-down" aria-hidden="true"></i></button></form>
+					</div>
+
 				</div>
+
 			</div>
+
 		</div>
 	</div>
-	<div class="container" id='searchResult'></div>
+	<section class="similar-shows">
+		<div class="container">
+			<div class="similar-shows-top-line">
+				<h2>You also may like</h2>
+				<div class="show-selector-wrapper">
+					<select id="showSelector">
+						<option selected disabled value="chooseAShow">Choose another TV-show</option>
+					</select>
+					<div class="show-selector-desc">or</div>
+					<button class="button">Return to all shows</button>
+				</div>
+
+			</div>
+
+			<div class="similar-shows-wrapper">
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+				<div class="similar-shows-item">
+					<img src="http://static.tvmaze.com/uploads/images/medium_portrait/190/476117.jpg" alt=""
+						class="similar-show-img">
+					<span class="similar-show-info">2018, Action</span>
+					<span class="similar-show-name">Inception</span>
+				</div>
+			</div>
+		</div cl>
+	</section>
+
+	<section id="filter">
+		<div class="container">
+			<div class="episode-selector">
+				<div id='searchResult' class="search-result"></div>
+				<div class="selector-box">
+					<select id="episodeSelector">
+						<option selected disabled value="chooseAnEpisode">Choose an episode</option>
+					</select>
+				</div>
+				<div class="search-result">or</div>
+				<div class="search-box">
+					<input type="text" name="" id="searchBoxInput" placeholder="Enter a keyword to search">
+
+				</div>
+
+				<button class="button" id="clearButton">Clear filter<i class="fa fa-times"
+						aria-hidden="true"></i></button>
+			</div>
+
+		</div>
+	</section>
+
+
 	<div id="root">
 
 	</div>
 
 	<!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-	<script src="episodes.js"></script>
+	<!-- <script src="episodes.js"></script> -->
 	<script src="shows.js"></script>
 
 	<!-- Loads YOUR javascript code -->
