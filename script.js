@@ -39,6 +39,7 @@ function setup() {
 			}
 		});
 		let currentShow = newAllShows[0];
+		renderCurrentShow(currentShow);
 
 		// Making a list for similar shows
 		let currentShowGenres = currentShow.genres;
@@ -129,9 +130,16 @@ function setup() {
 			similarShowImg.src = similarShows[similarShowNumber].image.medium;
 			similarShowsItem.append(similarShowImg);
 
-			let similarShowGenres = document.createAttribute('span');
+			let similarShowGenres = document.createElement('p');
 			similarShowGenres.className = 'similar-show-genres';
-			
+			currentShow.genres.forEach((genre) => {
+				similarShowGenres.textContent += `${genre}, `;
+			});
+			similarShowGenres.textContent = similarShowGenres.textContent.slice(
+				0,
+				-2
+			);
+			similarShowsItem.append(similarShowGenres);
 
 			let similarShowName = document.createElement('h3');
 			similarShowName.className = 'similar-show-name';
@@ -145,61 +153,9 @@ function setup() {
 			.then((json) => {
 				allEpisodes = json;
 				makePageForEpisodes(allEpisodes);
+				buildEpisodeSelector(allEpisodes);
 
-				function renderCurrentShow() {
-					// Building selector
-					let episodeSelector = document.querySelector('#episodeSelector');
-					episodeSelector.innerHTML = '';
-					let placeholder = document.createElement('option');
-					placeholder.value = 'chooseAnEpisode';
-					placeholder.textContent = 'Choose an episode';
-					placeholder.disabled = true;
-					placeholder.selected = true;
-					episodeSelector.append(placeholder);
-					for (let i = 0; i < allEpisodes.length; i++) {
-						let episode = document.createElement('option');
-						episodeSelector.append(episode);
-						episode.textContent = `S${allEpisodes[i].season
-							.toString()
-							.padStart(2, 0)}E${allEpisodes[i].number
-							.toString()
-							.padStart(2, 0)} - ${allEpisodes[i].name}`;
-						episode.value = [i];
-					}
-
-					// Render currernt show details
-
-					let showPoster = document.querySelector('#showPoster');
-					showPoster.src = currentShow.image.original;
-
-					let showName = document.querySelector('#showName');
-					showName.textContent = currentShow.name;
-
-					let genres = document.querySelector('.genres');
-					genres.textContent = '';
-					for (let i = 0; i < currentShow.genres.length; i++) {
-						let genre = document.createElement('a');
-						genre.textContent = currentShow.genres[i];
-						genre.href = '#';
-						genre.className = 'genre-tag';
-						genres.append(genre);
-					}
-
-					let showSummary = document.querySelector('#showSummary');
-					showSummary.innerHTML = currentShow.summary;
-
-					// Render selected episode
-					episodeSelector.addEventListener('change', () => {
-						document.getElementById('root').innerHTML = '';
-						let selectedEpisode = [allEpisodes[episodeSelector.value]];
-						makePageForEpisodes(selectedEpisode);
-						searchResult.textContent = `Displaying 1/${allEpisodes.length} episodes.`;
-					});
-				}
-				renderCurrentShow();
-
-				let searchResult = document.querySelector('#searchResult');
-				searchResult.textContent = `Displaying ${allEpisodes.length}/${allEpisodes.length} episodes.`;
+				renderSelectedEpisode(episodeSelector, allEpisodes);
 			})
 			.catch((error) => console.log(error));
 	});
@@ -247,8 +203,33 @@ function setup() {
 	});
 }
 
+function renderCurrentShow(show) {
+	// Render currernt show details
+	let showPoster = document.querySelector('#showPoster');
+	showPoster.src = show.image.original;
+
+	let showName = document.querySelector('#showName');
+	showName.textContent = show.name;
+
+	let genres = document.querySelector('.genres');
+	genres.textContent = '';
+	for (let i = 0; i < show.genres.length; i++) {
+		let genre = document.createElement('a');
+		genre.textContent = show.genres[i];
+		genre.href = '#';
+		genre.className = 'genre-tag';
+		genres.append(genre);
+	}
+
+	let showSummary = document.querySelector('#showSummary');
+	showSummary.innerHTML = show.summary;
+}
+
 function makePageForEpisodes(episodeList) {
 	const rootElem = document.getElementById('root');
+
+	let searchResult = document.querySelector('#searchResult');
+	searchResult.textContent = `Displaying ${episodeList.length}/${episodeList.length} episodes.`;
 
 	episodeList.forEach((episode) => {
 		let cardWrapper = document.createElement('div');
@@ -322,6 +303,37 @@ function makePageForEpisodes(episodeList) {
 		// cardWrapper.append(watchButton);
 		// watchButton.textContent = 'Watch an episode';
 		// watchButton.className = 'button';
+	});
+}
+
+function buildEpisodeSelector(episodeList) {
+	let episodeSelector = document.querySelector('#episodeSelector');
+	episodeSelector.innerHTML = '';
+	let placeholder = document.createElement('option');
+	placeholder.value = 'chooseAnEpisode';
+	placeholder.textContent = 'Choose an episode';
+	placeholder.disabled = true;
+	placeholder.selected = true;
+	episodeSelector.append(placeholder);
+	for (let i = 0; i < episodeList.length; i++) {
+		let episode = document.createElement('option');
+		episodeSelector.append(episode);
+		episode.textContent = `S${episodeList[i].season
+			.toString()
+			.padStart(2, 0)}E${episodeList[i].number.toString().padStart(2, 0)} - ${
+			episodeList[i].name
+		}`;
+		episode.value = [i];
+	}
+}
+
+function renderSelectedEpisode(selector, allEpisodeList) {
+	selector.addEventListener('change', () => {
+		document.getElementById('root').innerHTML = '';
+		let selectedEpisode = [allEpisodeList[selector.value]];
+		makePageForEpisodes(selectedEpisode);
+		let searchResult = document.querySelector('#searchResult');
+		searchResult.textContent = `Displaying 1/${allEpisodeList.length} episodes.`;
 	});
 }
 

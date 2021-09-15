@@ -65,6 +65,7 @@ input:focus-visible {
 }
 
 #root {
+	min-height: 1000px;
 	color: #2b2b2b;
 	display: flex;
 	flex-direction: row;
@@ -160,7 +161,7 @@ input:focus-visible {
 }
 
 .similar-shows {
-	padding: 50px 0;
+	padding: 100px 0;
 	color: white;
 	background-color: #121930;
 }
@@ -168,6 +169,7 @@ input:focus-visible {
 .similar-shows-top-line {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .similar-shows h2 {
@@ -181,6 +183,7 @@ input:focus-visible {
 .similar-shows-wrapper {
 	display: flex;
 	margin: 0 -30.5px;
+	margin-top: 20px;
 	justify-content: space-between;
 }
 
@@ -190,12 +193,17 @@ input:focus-visible {
 	margin: 0 30.5px;
 }
 
+.similar-shows-item h3 {
+	margin: 0;
+}
+
 .similar-show-img {
 	width: 160px;
 }
 
 .similar-show-genres {
 	font-size: 13px;
+	color: rgb(183, 196, 215);
 	margin: 8px 0;
 }
 
