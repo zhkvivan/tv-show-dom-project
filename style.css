@@ -194,14 +194,14 @@ input:focus-visible {
 	width: 160px;
 }
 
-.similar-show-info {
+.similar-show-genres {
 	font-size: 13px;
 	margin: 8px 0;
 }
 
 .similar-show-name {
 	font-weight: bold;
-	font-size: 16px;
+	font-size: 15px;
 }
 
 #filter {

@@ -26,7 +26,7 @@ function setup() {
 	// Making page for episodes
 	let allEpisodes = [];
 	let currentShowId;
-	let currentShow;
+
 	// Select show
 	showSelector.addEventListener('change', () => {
 		document.getElementById('root').innerHTML = '';
@@ -38,7 +38,106 @@ function setup() {
 				return true;
 			}
 		});
-		currentShow = newAllShows[0];
+		let currentShow = newAllShows[0];
+
+		// Making a list for similar shows
+		let currentShowGenres = currentShow.genres;
+
+		let similarShows = [];
+		allShows.forEach((show) => {
+			let anyShowGenres = show.genres;
+			if (
+				currentShowGenres.every((genre) => {
+					return anyShowGenres.some((a) => a == genre);
+				})
+			) {
+				similarShows.push(show);
+			}
+		});
+
+		// Excluding current show from the similar show list
+		function excludeCurrentShow() {
+			similarShows = similarShows.filter((show) => {
+				return !(currentShow.id == show.id);
+			});
+		}
+
+		excludeCurrentShow();
+
+		if (similarShows.length < 7) {
+			allShows.forEach((show) => {
+				let anyShowGenres = show.genres;
+				if (
+					currentShowGenres.some((genre) => {
+						return anyShowGenres.some((a) => a == genre);
+					})
+				) {
+					similarShows.push(show);
+				}
+			});
+			excludeCurrentShow();
+		}
+
+		if (similarShows.length < 7) {
+			for (let i = 0; i < 30; i++) {
+				similarShows.push(
+					allShows[Math.floor(Math.random() * allShows.length)]
+				);
+			}
+			excludeCurrentShow();
+		}
+
+		let uniqueRandomNumberArray = [];
+
+		// Filling array for similar shows
+		for (let i = 0; i < similarShows.length; i++) {
+			uniqueRandomNumberArray.push(i);
+		}
+
+		function shuffle(arr) {
+			for (let i = arr.length - 1; i > 0; i--) {
+				let temp = arr[i];
+				let randomNumber = Math.floor(Math.random() * (i + 1));
+				arr[i] = arr[randomNumber];
+				arr[randomNumber] = temp;
+			}
+			return arr;
+		}
+
+		// Shuffle
+		shuffle(uniqueRandomNumberArray);
+
+		let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
+		similarShowsWrapper.textContent = '';
+
+		// Render similar shows
+		for (let i = 0; i < 7; i++) {
+			let similarShowsItem = document.createElement('div');
+			similarShowsItem.className = 'similar-shows-item';
+			similarShowsWrapper.append(similarShowsItem);
+
+			let similarShowImg = document.createElement('img');
+			similarShowImg.className = 'similar-show-img';
+
+			let similarShowNumber = uniqueRandomNumberArray[i];
+
+			if (similarShows[similarShowNumber].image.medium == null) {
+				similarShows[similarShowNumber].image.medium =
+					'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
+			}
+
+			similarShowImg.src = similarShows[similarShowNumber].image.medium;
+			similarShowsItem.append(similarShowImg);
+
+			let similarShowGenres = document.createAttribute('span');
+			similarShowGenres.className = 'similar-show-genres';
+			
+
+			let similarShowName = document.createElement('h3');
+			similarShowName.className = 'similar-show-name';
+			similarShowName.textContent = similarShows[similarShowNumber].name;
+			similarShowsItem.append(similarShowName);
+		}
 
 		//Getting episodes
 		fetch(`https://api.tvmaze.com/shows/${currentShowId}/episodes`)
@@ -47,7 +146,7 @@ function setup() {
 				allEpisodes = json;
 				makePageForEpisodes(allEpisodes);
 
-				function selector() {
+				function renderCurrentShow() {
 					// Building selector
 					let episodeSelector = document.querySelector('#episodeSelector');
 					episodeSelector.innerHTML = '';
@@ -81,9 +180,9 @@ function setup() {
 					for (let i = 0; i < currentShow.genres.length; i++) {
 						let genre = document.createElement('a');
 						genre.textContent = currentShow.genres[i];
-						genre.href = '#'
+						genre.href = '#';
 						genre.className = 'genre-tag';
-						genres.append(genre)
+						genres.append(genre);
 					}
 
 					let showSummary = document.querySelector('#showSummary');
@@ -97,7 +196,7 @@ function setup() {
 						searchResult.textContent = `Displaying 1/${allEpisodes.length} episodes.`;
 					});
 				}
-				selector();
+				renderCurrentShow();
 
 				let searchResult = document.querySelector('#searchResult');
 				searchResult.textContent = `Displaying ${allEpisodes.length}/${allEpisodes.length} episodes.`;
