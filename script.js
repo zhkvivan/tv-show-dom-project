@@ -24,7 +24,6 @@ function setup() {
 	});
 
 	// Making page for episodes
-	let allEpisodes = [];
 	let currentShowId;
 
 	// Select show
@@ -39,172 +38,68 @@ function setup() {
 			}
 		});
 		let currentShow = newAllShows[0];
+
 		renderCurrentShow(currentShow);
-
-		// Making a list for similar shows
-		let currentShowGenres = currentShow.genres;
-
-		let similarShows = [];
-		allShows.forEach((show) => {
-			let anyShowGenres = show.genres;
-			if (
-				currentShowGenres.every((genre) => {
-					return anyShowGenres.some((a) => a == genre);
-				})
-			) {
-				similarShows.push(show);
-			}
-		});
-
-		// Excluding current show from the similar show list
-		function excludeCurrentShow() {
-			similarShows = similarShows.filter((show) => {
-				return !(currentShow.id == show.id);
-			});
-		}
-
-		excludeCurrentShow();
-
-		if (similarShows.length < 7) {
-			allShows.forEach((show) => {
-				let anyShowGenres = show.genres;
-				if (
-					currentShowGenres.some((genre) => {
-						return anyShowGenres.some((a) => a == genre);
-					})
-				) {
-					similarShows.push(show);
-				}
-			});
-			excludeCurrentShow();
-		}
-
-		if (similarShows.length < 7) {
-			for (let i = 0; i < 30; i++) {
-				similarShows.push(
-					allShows[Math.floor(Math.random() * allShows.length)]
-				);
-			}
-			excludeCurrentShow();
-		}
-
-		let uniqueRandomNumberArray = [];
-
-		// Filling array for similar shows
-		for (let i = 0; i < similarShows.length; i++) {
-			uniqueRandomNumberArray.push(i);
-		}
-
-		function shuffle(arr) {
-			for (let i = arr.length - 1; i > 0; i--) {
-				let temp = arr[i];
-				let randomNumber = Math.floor(Math.random() * (i + 1));
-				arr[i] = arr[randomNumber];
-				arr[randomNumber] = temp;
-			}
-			return arr;
-		}
-
-		// Shuffle
-		shuffle(uniqueRandomNumberArray);
-
-		let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
-		similarShowsWrapper.textContent = '';
-
-		// Render similar shows
-		for (let i = 0; i < 7; i++) {
-			let similarShowsItem = document.createElement('div');
-			similarShowsItem.className = 'similar-shows-item';
-			similarShowsWrapper.append(similarShowsItem);
-
-			let similarShowImg = document.createElement('img');
-			similarShowImg.className = 'similar-show-img';
-
-			let similarShowNumber = uniqueRandomNumberArray[i];
-
-			if (similarShows[similarShowNumber].image.medium == null) {
-				similarShows[similarShowNumber].image.medium =
-					'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
-			}
-
-			similarShowImg.src = similarShows[similarShowNumber].image.medium;
-			similarShowsItem.append(similarShowImg);
-
-			let similarShowGenres = document.createElement('p');
-			similarShowGenres.className = 'similar-show-genres';
-			currentShow.genres.forEach((genre) => {
-				similarShowGenres.textContent += `${genre}, `;
-			});
-			similarShowGenres.textContent = similarShowGenres.textContent.slice(
-				0,
-				-2
-			);
-			similarShowsItem.append(similarShowGenres);
-
-			let similarShowName = document.createElement('h3');
-			similarShowName.className = 'similar-show-name';
-			similarShowName.textContent = similarShows[similarShowNumber].name;
-			similarShowsItem.append(similarShowName);
-		}
-
-		//Getting episodes
-		fetch(`https://api.tvmaze.com/shows/${currentShowId}/episodes`)
-			.then((response) => response.json())
-			.then((json) => {
-				allEpisodes = json;
-				makePageForEpisodes(allEpisodes);
-				buildEpisodeSelector(allEpisodes);
-
-				renderSelectedEpisode(episodeSelector, allEpisodes);
-			})
-			.catch((error) => console.log(error));
+		makeSimilarShowList(currentShow, allShows, allShows);
+		getAllEpisodes(currentShowId);
 	});
 
 	let header = document.querySelector('.header');
 	header.style.background =
 		"linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('https://1.bp.blogspot.com/-w_G1a8lpoiY/XK1evF74RmI/AAAAAAAAL44/grV_cVEMcEAq_vmjT3CdmfW5BunTHV4vgCLcBGAs/s2560/emilia-clarke-2880x1800-daenerys-targaryen-game-of-thrones-season-8-4k-17745.jpg') center/cover ";
 
-	// Show poster + info
+	function makeFilter() {
+		// Search
+		let searchBoxInput = document.getElementById('searchBoxInput');
+		let filteredEpisodes = [];
 
-	// Search
-	let searchBoxInput = document.getElementById('searchBoxInput');
-	let filteredEpisodes = [];
+		// Filter items
+		searchBoxInput.addEventListener('keyup', () => {
+			// Getting filtered episodes
+			filteredEpisodes = allEpisodes.filter((episode) => {
+				if (
+					episode.name
+						.toLowerCase()
+						.includes(searchBoxInput.value.toLowerCase())
+				) {
+					return true;
+				} else return false;
+			});
 
-	// Filter items
-	searchBoxInput.addEventListener('keyup', () => {
-		// Getting filtered episodes
-		filteredEpisodes = allEpisodes.filter((episode) => {
-			if (
-				episode.name.toLowerCase().includes(searchBoxInput.value.toLowerCase())
-			) {
-				return true;
-			} else return false;
+			// Render filtered episodes
+			const rootElem = document.getElementById('root');
+			rootElem.innerHTML = '';
+			makePageForEpisodes(filteredEpisodes);
+
+			// Search Result
+			searchResult.textContent = `Displaying ${filteredEpisodes.length}/${allEpisodes.length} episodes.`;
 		});
 
-		// Render filtered episodes
-		const rootElem = document.getElementById('root');
-		rootElem.innerHTML = '';
-		makePageForEpisodes(filteredEpisodes);
+		// Clear search result
+		let clearButton = document.querySelector('#clearButton');
+		clearButton.addEventListener('click', () => {
+			searchBoxInput.value = '';
+			searchResult.textContent = `Displaying ${allEpisodes.length}/${allEpisodes.length} episodes.`;
 
-		// Search Result
-		searchResult.textContent = `Displaying ${filteredEpisodes.length}/${allEpisodes.length} episodes.`;
-	});
+			document.querySelector('#episodeSelector').value = 'chooseAnEpisode';
 
-	// Clear search result
-	let clearButton = document.querySelector('#clearButton');
-	clearButton.addEventListener('click', () => {
-		searchBoxInput.value = '';
-		searchResult.textContent = `Displaying ${allEpisodes.length}/${allEpisodes.length} episodes.`;
-
-		document.querySelector('#episodeSelector').value = 'chooseAnEpisode';
-
-		document.getElementById('root').innerHTML = '';
-		makePageForEpisodes(allEpisodes);
-	});
+			document.getElementById('root').innerHTML = '';
+			makePageForEpisodes(allEpisodes);
+		});
+	}
+	makeFilter();
 }
 
 function renderCurrentShow(show) {
 	// Render currernt show details
+	let header = document.querySelector('.header');
+	let currentShowBackground = backgroundImages.filter((bgShow) => {
+		return bgShow.id == show.id;
+	});
+	currentShowBackground = currentShowBackground[0].url;
+	console.log(currentShowBackground);
+	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackground}') top/cover `;
+
 	let showPoster = document.querySelector('#showPoster');
 	showPoster.src = show.image.original;
 
@@ -227,8 +122,10 @@ function renderCurrentShow(show) {
 
 function makePageForEpisodes(episodeList) {
 	const rootElem = document.getElementById('root');
+	rootElem.innerHTML = '';
 
 	let searchResult = document.querySelector('#searchResult');
+
 	searchResult.textContent = `Displaying ${episodeList.length}/${episodeList.length} episodes.`;
 
 	episodeList.forEach((episode) => {
@@ -308,6 +205,7 @@ function makePageForEpisodes(episodeList) {
 
 function buildEpisodeSelector(episodeList) {
 	let episodeSelector = document.querySelector('#episodeSelector');
+
 	episodeSelector.innerHTML = '';
 	let placeholder = document.createElement('option');
 	placeholder.value = 'chooseAnEpisode';
@@ -325,6 +223,7 @@ function buildEpisodeSelector(episodeList) {
 		}`;
 		episode.value = [i];
 	}
+	document.getElementById('searchBoxInput').value = '';
 }
 
 function renderSelectedEpisode(selector, allEpisodeList) {
@@ -336,5 +235,202 @@ function renderSelectedEpisode(selector, allEpisodeList) {
 		searchResult.textContent = `Displaying 1/${allEpisodeList.length} episodes.`;
 	});
 }
+
+function makeSimilarShowList(currentShow, allShowsList) {
+	// Making a list for similar shows
+	let currentShowGenres = currentShow.genres;
+
+	let similarShows = [];
+	allShowsList.forEach((show) => {
+		let anyShowGenres = show.genres;
+		if (
+			currentShowGenres.every((genre) => {
+				return anyShowGenres.some((a) => a == genre);
+			})
+		) {
+			similarShows.push(show);
+		}
+	});
+
+	// Excluding current show from the similar show list
+	function excludeCurrentShow() {
+		similarShows = similarShows.filter((show) => {
+			return !(currentShow.id == show.id);
+		});
+	}
+
+	excludeCurrentShow();
+
+	if (similarShows.length < 7) {
+		allShowsList.forEach((show) => {
+			let anyShowGenres = show.genres;
+			if (
+				currentShowGenres.some((genre) => {
+					return anyShowGenres.some((a) => a == genre);
+				})
+			) {
+				similarShows.push(show);
+			}
+		});
+		excludeCurrentShow();
+	}
+
+	if (similarShows.length < 7) {
+		for (let i = 0; i < 30; i++) {
+			similarShows.push(
+				allShowsList[Math.floor(Math.random() * allShowsList.length)]
+			);
+		}
+		excludeCurrentShow();
+	}
+
+	let uniqueRandomNumberArray = [];
+
+	// Filling array for similar shows
+	for (let i = 0; i < similarShows.length; i++) {
+		uniqueRandomNumberArray.push(i);
+	}
+
+	function shuffle(arr) {
+		for (let i = arr.length - 1; i > 0; i--) {
+			let temp = arr[i];
+			let randomNumber = Math.floor(Math.random() * (i + 1));
+			arr[i] = arr[randomNumber];
+			arr[randomNumber] = temp;
+		}
+		return arr;
+	}
+
+	// Shuffle
+	shuffle(uniqueRandomNumberArray);
+
+	let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
+	similarShowsWrapper.textContent = '';
+
+	// Render similar shows
+	for (let i = 0; i < 7; i++) {
+		let similarShowsItem = document.createElement('div');
+		similarShowsItem.className = 'similar-shows-item';
+		similarShowsWrapper.append(similarShowsItem);
+
+		similarShowsItem.addEventListener('click', () => {
+			window.scrollTo(0, 0);
+			console.log();
+			renderCurrentShow(similarShows[similarShowNumber]);
+			makeSimilarShowList(similarShows[similarShowNumber], allShowsList);
+			document.querySelector('#showSelector').value =
+				similarShows[similarShowNumber].id;
+			getAllEpisodes(similarShows[similarShowNumber].id);
+		});
+
+		let similarShowImg = document.createElement('img');
+		similarShowImg.className = 'similar-show-img';
+
+		let similarShowNumber = uniqueRandomNumberArray[i];
+
+		if (similarShows[similarShowNumber].image.medium == null) {
+			similarShows[similarShowNumber].image.medium =
+				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
+		}
+
+		similarShowImg.src = similarShows[similarShowNumber].image.medium;
+		similarShowsItem.append(similarShowImg);
+
+		let similarShowGenres = document.createElement('p');
+		similarShowGenres.className = 'similar-show-genres';
+		similarShows[similarShowNumber].genres.forEach((genre) => {
+			similarShowGenres.textContent += `${genre}, `;
+		});
+		similarShowGenres.textContent = similarShowGenres.textContent.slice(0, -2);
+		similarShowsItem.append(similarShowGenres);
+
+		let similarShowName = document.createElement('h3');
+		similarShowName.className = 'similar-show-name';
+		similarShowName.textContent = similarShows[similarShowNumber].name;
+		similarShowsItem.append(similarShowName);
+	}
+}
+
+function getAllEpisodes(currentShowId) {
+	//Getting episodes
+	fetch(`https://api.tvmaze.com/shows/${currentShowId}/episodes`)
+		.then((response) => response.json())
+		.then((json) => {
+			allEpisodes = json;
+
+			if (!(allEpisodes.status == 404)) {
+				makePageForEpisodes(allEpisodes);
+				buildEpisodeSelector(allEpisodes);
+				renderSelectedEpisode(episodeSelector, allEpisodes);
+			} else {
+				document.querySelector('.episode-selector').style.fontSize = '24px';
+				document.querySelector('.episode-selector').textContent =
+					'Sorry, there is nothing to display';
+			}
+		})
+		.catch((error) => console.log(error));
+}
+
+let backgroundImages = [
+	{
+		id: 1632,
+		name: 'Horatio Hornblower',
+		url: '../img/1632.jpg',
+	},
+	{
+		id: 465,
+		url: '../img/465.jpg',
+	},
+	{
+		id: 768,
+		url: '../img/768.jpg',
+	},
+	{
+		id: 169,
+		url: '../img/169.jpg',
+	},
+	{
+		id: 179,
+		url: '../img/179.jpg',
+	},
+	{
+		id: 180,
+		url: '../img/180.jpg',
+	},
+	{
+		id: 204,
+		url: '../img/204.jpg',
+	},
+	{
+		id: 565,
+		name: 'Deadwood',
+		url: '../img/565.jpg',
+	},
+	{
+		id: 523,
+		name: 'The West Wing',
+		url: '../img/523.jpg',
+	},
+	{
+		id: 527,
+		name: 'The Sopranos',
+		url: '../img/527.jpg',
+	},
+	{
+		id: 748,
+		name: 'Oz',
+		url: '../img/748.jpg',
+	},
+	{
+		id: 1910,
+		name: 'Bron / Broen',
+		url: '../img/1910.jpg',
+	},
+	{
+		id: 396,
+		name: 'Gravity Falls',
+		url: '../img/396.jpg',
+	},
+];
 
 window.onload = setup;

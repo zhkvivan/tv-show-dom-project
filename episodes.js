@@ -31,7 +31,7 @@ function getOneEpisode() {
   };
 }
 
-function getAllEpisodes() {
+function getAllEpisodesOld() {
   return [
     {
       id: 4952,

@@ -191,6 +191,7 @@ input:focus-visible {
 	display: flex;
 	flex-direction: column;
 	margin: 0 30.5px;
+	cursor: pointer;
 }
 
 .similar-shows-item h3 {
