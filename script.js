@@ -25,10 +25,16 @@ function setup() {
 
 	// Making page for episodes
 	let currentShowId;
-
+	let defaultBackground = 'https://i.ibb.co/ZGTZH8R/k-LAVl-croper-ru.jpg';
 	// Select show
 	showSelector.addEventListener('change', () => {
 		document.getElementById('root').innerHTML = '';
+
+		document.querySelector('.selector-box').style.display = 'block';
+		document.querySelector('#orResult').style.display = 'block';
+		document.querySelector('.search-box').style.display = 'block';
+		document.querySelector('.episode-selector button').style.display =
+			'inline-block';
 
 		//Geting current show
 		currentShowId = showSelector.value;
@@ -39,14 +45,48 @@ function setup() {
 		});
 		let currentShow = newAllShows[0];
 
-		renderCurrentShow(currentShow);
-		makeSimilarShowList(currentShow, allShows, allShows);
+		let currentShowObject = backgroundImages.filter((bgShow) => {
+			return bgShow.id == currentShow.id;
+		});
+		let currentShowBackgroundUrl;
+		if (!(currentShowObject.length == 0) || currentShowObject == undefined) {
+			currentShowBackgroundUrl = currentShowObject[0].url;
+		} else {
+			currentShowBackgroundUrl = defaultBackground;
+		}
+		// console.log(currentShowBackground);
+		// header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackground}') top/cover `;
+
+		let promiseFunction = function (url) {
+			return new Promise((resolve, reject) => {
+				let img = new Image();
+				img.src = currentShowBackgroundUrl;
+
+				img.onload = () => {
+					resolve();
+				};
+				img.onerror = () => {
+					reject(error);
+				};
+			});
+		};
+
+		promiseFunction(currentShowBackgroundUrl).then(
+			() => {
+				console.log('Status OK');
+				renderCurrentShow(currentShow, currentShowBackgroundUrl);
+			},
+			(error) => {
+				console.log(error);
+			}
+		);
+
+		makeSimilarShowList(currentShow, allShows, currentShowBackgroundUrl);
 		getAllEpisodes(currentShowId);
 	});
 
 	let header = document.querySelector('.header');
-	header.style.background =
-		"linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('https://1.bp.blogspot.com/-w_G1a8lpoiY/XK1evF74RmI/AAAAAAAAL44/grV_cVEMcEAq_vmjT3CdmfW5BunTHV4vgCLcBGAs/s2560/emilia-clarke-2880x1800-daenerys-targaryen-game-of-thrones-season-8-4k-17745.jpg') center/cover ";
+	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${defaultBackground}') top/cover`;
 
 	function makeFilter() {
 		// Search
@@ -90,15 +130,18 @@ function setup() {
 	makeFilter();
 }
 
-function renderCurrentShow(show) {
-	// Render currernt show details
+function renderCurrentShow(show, currentShowBackgroundUrl) {
+	// Render currernt show details in the header
 	let header = document.querySelector('.header');
-	let currentShowBackground = backgroundImages.filter((bgShow) => {
-		return bgShow.id == show.id;
-	});
-	currentShowBackground = currentShowBackground[0].url;
-	console.log(currentShowBackground);
-	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackground}') top/cover `;
+
+	// let currentShowBackground = backgroundImages.filter((bgShow) => {
+	// 	return bgShow.id == show.id;
+	// });
+	// currentShowBackground = currentShowBackground[0].url;
+	// console.log(currentShowBackground);
+	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackgroundUrl}') top/cover `;
+
+	console.log(currentShowBackgroundUrl);
 
 	let showPoster = document.querySelector('#showPoster');
 	showPoster.src = show.image.original;
@@ -236,7 +279,11 @@ function renderSelectedEpisode(selector, allEpisodeList) {
 	});
 }
 
-function makeSimilarShowList(currentShow, allShowsList) {
+function makeSimilarShowList(
+	currentShow,
+	allShowsList,
+	currentShowBackgroundUrl
+) {
 	// Making a list for similar shows
 	let currentShowGenres = currentShow.genres;
 
@@ -314,10 +361,20 @@ function makeSimilarShowList(currentShow, allShowsList) {
 		similarShowsWrapper.append(similarShowsItem);
 
 		similarShowsItem.addEventListener('click', () => {
-			window.scrollTo(0, 0);
-			console.log();
-			renderCurrentShow(similarShows[similarShowNumber]);
-			makeSimilarShowList(similarShows[similarShowNumber], allShowsList);
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth',
+			});
+
+			renderCurrentShow(
+				similarShows[similarShowNumber],
+				currentShowBackgroundUrl
+			);
+			makeSimilarShowList(
+				similarShows[similarShowNumber],
+				allShowsList,
+				currentShowBackgroundUrl
+			);
 			document.querySelector('#showSelector').value =
 				similarShows[similarShowNumber].id;
 			getAllEpisodes(similarShows[similarShowNumber].id);
@@ -364,8 +421,13 @@ function getAllEpisodes(currentShowId) {
 				renderSelectedEpisode(episodeSelector, allEpisodes);
 			} else {
 				document.querySelector('.episode-selector').style.fontSize = '24px';
-				document.querySelector('.episode-selector').textContent =
-					'Sorry, there is nothing to display';
+				document.querySelector('#searchResult').textContent =
+					'Sorry, we have nothing to show';
+				document.querySelector('.selector-box').style.display = 'none';
+				document.querySelector('#orResult').style.display = 'none';
+				document.querySelector('.search-box').style.display = 'none';
+				document.querySelector('.episode-selector button').style.display =
+					'none';
 			}
 		})
 		.catch((error) => console.log(error));
@@ -375,11 +437,17 @@ let backgroundImages = [
 	{
 		id: 1632,
 		name: 'Horatio Hornblower',
-		url: '../img/1632.jpg',
+		url: 'https://avatars.mds.yandex.net/get-zen_doc/1329105/pub_5f97b0241772f52b500a9320_5f97b088b2613332b084a3d8/scale_1200',
+	},
+	{
+		id: 1905,
+		name: 'Bleach',
+		url: 'https://vsthemes.org/uploads/posts/2018-12/1581997840_bleach_vsthemes_ru-3.jpg',
 	},
 	{
 		id: 465,
-		url: '../img/465.jpg',
+		name: 'Band of Brothers',
+		url: 'https://mocah.org/uploads/posts/1166113-people-soldier-military-Band-of-Brothers-crowd-troop.jpg',
 	},
 	{
 		id: 768,

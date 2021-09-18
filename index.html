@@ -26,7 +26,7 @@
 				</nav>
 			</div>
 			<div class="show-info">
-				<img src="" alt="" id='showPoster'>
+				<div class="show-poster-box"><img src="" alt="" id='showPoster'></div>
 				<div class="show-info-content">
 					<div>
 						<h1 id="showName"></h1>
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 			<div class="similar-shows-wrapper">
-				
+
 			</div>
 		</div>
 	</section>
@@ -65,20 +65,23 @@
 	<section id="filter">
 		<div class="container">
 			<div class="episode-selector">
-				<div id='searchResult' class="search-result"></div>
-				<div class="selector-box">
-					<select id="episodeSelector">
-						<option selected disabled value="chooseAnEpisode">Choose an episode</option>
-					</select>
-				</div>
-				<div class="search-result">or</div>
-				<div class="search-box">
-					<input type="text" name="" id="searchBoxInput" placeholder="Enter a keyword to search">
 
-				</div>
+				
+					<div id='searchResult' class="search-result"></div>
+					<div class="selector-box">
+						<select id="episodeSelector">
+							<option selected disabled value="chooseAnEpisode">Choose an episode</option>
+						</select>
+					</div>
+					<div class="search-result" id="orResult">or</div>
+					<div class="search-box">
+						<input type="text" name="" id="searchBoxInput" placeholder="Enter a keyword to search">
 
-				<button class="button" id="clearButton">Clear filter<i class="fa fa-times"
-						aria-hidden="true"></i></button>
+					</div>
+
+					<button class="button" id="clearButton">Clear filter<i class="fa fa-times"
+							aria-hidden="true"></i></button>
+				
 			</div>
 
 		</div>
