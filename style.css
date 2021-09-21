@@ -84,6 +84,7 @@ input:focus-visible {
 
 .header {
 	color: white;
+	background-color: black;
 }
 
 .top-line {
@@ -135,7 +136,6 @@ input:focus-visible {
 	margin-right: 80px;
 }
 #showPoster {
-	
 	object-fit: cover;
 	object-position: center;
 	width: 100%;
@@ -161,9 +161,6 @@ input:focus-visible {
 	border: 2px solid white;
 	border-radius: 50px;
 	color: white;
-}
-
-#showSelector > option {
 }
 
 .show-selector-desc {
@@ -204,6 +201,39 @@ input:focus-visible {
 	cursor: pointer;
 }
 
+@media (max-width: 1560px) {
+	.similar-shows-wrapper .similar-shows-item:nth-child(1) {
+		display: none;
+	}
+}
+
+@media (max-width: 1310px) {
+	.similar-shows-wrapper .similar-shows-item:nth-child(2) {
+		display: none;
+	}
+}
+
+@media (max-width: 1110px) {
+	.similar-shows-wrapper .similar-shows-item:nth-child(3) {
+		display: none;
+	}
+}
+
+@media (max-width: 890px) {
+	.similar-shows-wrapper .similar-shows-item:nth-child(4) {
+		display: none;
+	}
+}
+
+@media (max-width: 650px) {
+	.similar-shows-wrapper .similar-shows-item:nth-child(5) {
+		display: none;
+	}
+	.similar-shows-wrapper {
+		justify-content: center;
+	}
+}
+
 .similar-shows-item h3 {
 	margin: 0;
 }
@@ -227,7 +257,61 @@ input:focus-visible {
 	padding: 100px 0;
 }
 
+#content {
+	padding: 100px 0;
+}
 
+.content-wrapper {
+	display: flex;
+	justify-content: space-between;
+}
+
+.main-filter {
+	width: 350px;
+	height: 600px;
+	border: 2px solid black;
+	position: sticky;
+	top: 50px;
+	left: 0;
+}
+.alphabet-box {
+	padding: 0 10px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+
+.alphabet-item {
+	width: 60px;
+	height: 60px;
+	margin: 5px;
+	border: 2px solid red;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.content-inner {
+	width: 1100px;
+	height: 2000px;
+	border: 2px solid red;
+	display: flex;
+	flex-direction: column;
+
+}
+
+.content-item {
+	display: flex;
+
+}
+
+.content-item .show-poster-box {
+	width: 200px;
+	height: 270px;
+}
 
 .episode-selector {
 	display: flex;
@@ -235,15 +319,19 @@ input:focus-visible {
 	justify-content: center;
 }
 
-
-
 .search-box {
 	margin-right: 20px;
 }
 
+.search-input {
+	font-size: 16px;
+	border: 2px solid #121930;
+	border-radius: 50px;
+	padding: 2px;
+	width: 280px;
+}
 #episodeSelector,
 #searchBoxInput {
-	/* border: none; */
 	font-size: 16px;
 	border: 2px solid #121930;
 	border-radius: 50px;
@@ -273,13 +361,12 @@ input:focus-visible {
 	height: 550px;
 	margin: 0 10px 30px 10px;
 	box-shadow: 0px 0px 38px -20px rgba(34, 60, 80, 0.56);
-	transition: transform .3s;
+	transition: transform 0.3s;
 	cursor: pointer;
 }
 
 .card-wrapper:hover {
 	transform: scale(1.03);
-	
 }
 
 .episode-wrapper {

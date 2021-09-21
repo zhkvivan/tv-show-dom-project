@@ -1,35 +1,58 @@
-//You can edit ALL of the code here
-function setup() {
-	let allShows = getAllShows();
-	let showSelector = document.querySelector('#showSelector');
-	// Making sort for all shows
-	allShows = allShows.sort((a, b) => {
-		let showA = a.name.toLowerCase();
-		let showB = b.name.toLowerCase();
+function makeHomePage() {
+	let showInfo = document.querySelector('.show-info');
+	showInfo.style.display = 'none';
 
-		if (showA < showB) {
-			return -1;
+	let header = document.querySelector('.header');
+	header.style.minHeight = '500px';
+
+	let popularShowsHeader = document.querySelector(
+		'.similar-shows-top-line > h2'
+	);
+	popularShowsHeader.textContent = 'Popular TV-Shows';
+
+	returnButton.style.display = 'none';
+	let showSelectorDesc = document.querySelector('.show-selector-desc');
+	showSelectorDesc.style.display = 'none';
+
+	filter.style.display = 'none';
+
+	let allShows = getAllShows();
+	buildShowSelector(allShows);
+
+	let uniqueRandomNumberArray = [];
+
+	// Filling array for similar shows
+	for (let i = 0; i < 300; i++) {
+		uniqueRandomNumberArray.push(i);
+	}
+
+	// Shuffle
+	shuffle(uniqueRandomNumberArray);
+
+	let showsWithAPoster = allShows.filter((show) => {
+		if (!(show.image == null)) {
+			return show;
 		}
-		if (showA > showB) {
-			return 1;
-		}
-		return 0;
 	});
-	// Making options for all shows
-	allShows.forEach((show) => {
-		let option = document.createElement('option');
-		showSelector.append(option);
-		option.textContent = show.name;
-		option.value = show.id;
-	});
+
+	makeShowRow(uniqueRandomNumberArray, showsWithAPoster, allShows);
 
 	// Making page for episodes
 	let currentShowId;
 	let defaultBackground = 'https://i.ibb.co/ZGTZH8R/k-LAVl-croper-ru.jpg';
+
 	// Select show
 	showSelector.addEventListener('change', () => {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
+
+		document.querySelector('.show-info').style.display = 'flex';
+
 		document.getElementById('root').innerHTML = '';
 
+		filter.style.display = 'block';
 		document.querySelector('.selector-box').style.display = 'block';
 		document.querySelector('#orResult').style.display = 'block';
 		document.querySelector('.search-box').style.display = 'block';
@@ -73,20 +96,27 @@ function setup() {
 
 		promiseFunction(currentShowBackgroundUrl).then(
 			() => {
-				console.log('Status OK');
 				renderCurrentShow(currentShow, currentShowBackgroundUrl);
+				makeSimilarShowList(currentShow, allShows, currentShowBackgroundUrl);
 			},
 			(error) => {
 				console.log(error);
 			}
 		);
 
-		makeSimilarShowList(currentShow, allShows, currentShowBackgroundUrl);
 		getAllEpisodes(currentShowId);
 	});
 
-	let header = document.querySelector('.header');
-	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${defaultBackground}') top/cover`;
+	returnButton.addEventListener('click', () => {
+		document.querySelector('.show-info').style.display = 'none';
+		let popularShowsHeader = document.querySelector(
+			'.similar-shows-top-line > h2'
+		);
+		popularShowsHeader.textContent = 'Popular TV-Shows';
+		showSelector.value = 'chooseAShow';
+		filter.style.display = 'none';
+		root.textContent = '';
+	});
 
 	function makeFilter() {
 		// Search
@@ -128,20 +158,102 @@ function setup() {
 		});
 	}
 	makeFilter();
+
+	
+
+	function buildShowFilter() {
+		let arr_EN = [
+			'0-9',
+			'A',
+			'B',
+			'C',
+			'D',
+			'E',
+			'F',
+			'G',
+			'H',
+			'I',
+			'J',
+			'K',
+			'L',
+			'M',
+			'N',
+			'O',
+			'P',
+			'Q',
+			'R',
+			'S',
+			'T',
+			'U',
+			'V',
+			'W',
+			'X',
+			'Y',
+			'Z',
+		];
+		let alphabetBox = document.querySelector('.alphabet-box');
+		let filteredShows;
+
+		// Creating alphabet filter
+		for (let i = 0; i < arr_EN.length; i++) {
+			let item = document.createElement('div');
+			item.className = 'alphabet-item';
+			alphabetBox.append(item);
+
+			let letter = document.createElement('span');
+			letter.className = 'alphabet-letter';
+			letter.textContent = arr_EN[i];
+			item.append(letter);
+
+			let numberOfShows = document.createElement('span');
+			numberOfShows.className = 'alphabet-number';
+			numberOfShows.textContent = '33';
+			item.append(numberOfShows);
+
+			item.addEventListener('click', () => {
+				let filteredShowsByLetter;
+				if (letter.textContent == '0-9') {
+					let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+					filteredShowsByLetter = allShows.filter((show) => {
+						if (
+							numbersArray.some((number) => {
+								if (number == Array.from(show.name)[0]) {
+									return true;
+								}
+							})
+						) {
+							return true;
+						}
+					});
+				} else {
+					filteredShowsByLetter = allShows.filter((show) => {
+						if (letter.textContent == Array.from(show.name)[0]) {
+							return true;
+						}
+					});
+				}
+				filteredShows = filteredShowsByLetter;
+			});
+		}
+
+	}
+
+	buildShowFilter();
+}
+
+function makeCurrentShowPage() {
+	let allShows = getAllShows();
+	// buildShowSelector(allShows);
+
+	let header = document.querySelector('.header');
+	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${defaultBackground}') top/cover`;
 }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
 	// Render currernt show details in the header
 	let header = document.querySelector('.header');
 
-	// let currentShowBackground = backgroundImages.filter((bgShow) => {
-	// 	return bgShow.id == show.id;
-	// });
-	// currentShowBackground = currentShowBackground[0].url;
-	// console.log(currentShowBackground);
 	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackgroundUrl}') top/cover `;
-
-	console.log(currentShowBackgroundUrl);
 
 	let showPoster = document.querySelector('#showPoster');
 	showPoster.src = show.image.original;
@@ -246,6 +358,30 @@ function makePageForEpisodes(episodeList) {
 	});
 }
 
+function buildShowSelector(allShows) {
+	let showSelector = document.querySelector('#showSelector');
+	// Making sort for all shows
+	allShows = allShows.sort((a, b) => {
+		let showA = a.name.toLowerCase();
+		let showB = b.name.toLowerCase();
+
+		if (showA < showB) {
+			return -1;
+		}
+		if (showA > showB) {
+			return 1;
+		}
+		return 0;
+	});
+	// Making options for all shows
+	allShows.forEach((show) => {
+		let option = document.createElement('option');
+		showSelector.append(option);
+		option.textContent = show.name;
+		option.value = show.id;
+	});
+}
+
 function buildEpisodeSelector(episodeList) {
 	let episodeSelector = document.querySelector('#episodeSelector');
 
@@ -284,6 +420,11 @@ function makeSimilarShowList(
 	allShowsList,
 	currentShowBackgroundUrl
 ) {
+	document.querySelector('.similar-shows-top-line > h2').textContent =
+		'You also may like';
+	returnButton.style.display = 'inline-block';
+	document.querySelector('.show-selector-desc').style.display = 'block';
+
 	// Making a list for similar shows
 	let currentShowGenres = currentShow.genres;
 
@@ -338,74 +479,23 @@ function makeSimilarShowList(
 		uniqueRandomNumberArray.push(i);
 	}
 
-	function shuffle(arr) {
-		for (let i = arr.length - 1; i > 0; i--) {
-			let temp = arr[i];
-			let randomNumber = Math.floor(Math.random() * (i + 1));
-			arr[i] = arr[randomNumber];
-			arr[randomNumber] = temp;
-		}
-		return arr;
-	}
-
 	// Shuffle
 	shuffle(uniqueRandomNumberArray);
 
-	let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
-	similarShowsWrapper.textContent = '';
+	// Checking width
+	// if (matchMedia) {
+	// 	let screen = window.matchMedia('(max-width: 1560px)');
+	// 	screen.addListener(changes);
+	// 	changes(screen);
+	// }
+	// function changes(screen) {
+	// 	if (screen.matches) {
+	// 	}
+	// }
 
 	// Render similar shows
-	for (let i = 0; i < 7; i++) {
-		let similarShowsItem = document.createElement('div');
-		similarShowsItem.className = 'similar-shows-item';
-		similarShowsWrapper.append(similarShowsItem);
 
-		similarShowsItem.addEventListener('click', () => {
-			window.scrollTo({
-				top: 0,
-				behavior: 'smooth',
-			});
-
-			renderCurrentShow(
-				similarShows[similarShowNumber],
-				currentShowBackgroundUrl
-			);
-			makeSimilarShowList(
-				similarShows[similarShowNumber],
-				allShowsList,
-				currentShowBackgroundUrl
-			);
-			document.querySelector('#showSelector').value =
-				similarShows[similarShowNumber].id;
-			getAllEpisodes(similarShows[similarShowNumber].id);
-		});
-
-		let similarShowImg = document.createElement('img');
-		similarShowImg.className = 'similar-show-img';
-
-		let similarShowNumber = uniqueRandomNumberArray[i];
-
-		if (similarShows[similarShowNumber].image.medium == null) {
-			similarShows[similarShowNumber].image.medium =
-				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
-		}
-
-		similarShowImg.src = similarShows[similarShowNumber].image.medium;
-		similarShowsItem.append(similarShowImg);
-
-		let similarShowGenres = document.createElement('p');
-		similarShowGenres.className = 'similar-show-genres';
-		similarShows[similarShowNumber].genres.forEach((genre) => {
-			similarShowGenres.textContent += `${genre}, `;
-		});
-		similarShowGenres.textContent = similarShowGenres.textContent.slice(0, -2);
-		similarShowsItem.append(similarShowGenres);
-
-		let similarShowName = document.createElement('h3');
-		similarShowName.className = 'similar-show-name';
-		similarShowName.textContent = similarShows[similarShowNumber].name;
-		similarShowsItem.append(similarShowName);
-	}
+	makeShowRow(uniqueRandomNumberArray, similarShows, allShowsList);
 }
 
 function getAllEpisodes(currentShowId) {
@@ -433,6 +523,90 @@ function getAllEpisodes(currentShowId) {
 		.catch((error) => console.log(error));
 }
 
+function shuffle(arr) {
+	for (let i = arr.length - 1; i > 0; i--) {
+		let temp = arr[i];
+		let randomNumber = Math.floor(Math.random() * (i + 1));
+		arr[i] = arr[randomNumber];
+		arr[randomNumber] = temp;
+	}
+	return arr;
+}
+
+function makeShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
+	let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
+	similarShowsWrapper.textContent = '';
+
+	for (let i = 0; i < 7; i++) {
+		let similarShowsItem = document.createElement('div');
+		similarShowsItem.className = 'similar-shows-item';
+		similarShowsWrapper.append(similarShowsItem);
+
+		similarShowsItem.addEventListener('click', () => {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth',
+			});
+
+			document.querySelector('.show-info').style.display = 'flex';
+			filter.style.display = 'block';
+
+			let defaultBackground = 'https://i.ibb.co/ZGTZH8R/k-LAVl-croper-ru.jpg';
+
+			currentShowBackgroundUrl = defaultBackground;
+
+			backgroundImages.forEach((object) => {
+				if (object.id == similarShows[similarShowNumber].id) {
+					currentShowBackgroundUrl = object.url;
+					console.log(object.url);
+				}
+			});
+			console.log(currentShowBackgroundUrl);
+
+			// currentShowBackgroundUrl = similarShows[similarShowNumber].url;
+
+			renderCurrentShow(
+				similarShows[similarShowNumber],
+				currentShowBackgroundUrl
+			);
+			makeSimilarShowList(
+				similarShows[similarShowNumber],
+				allShowsList,
+				currentShowBackgroundUrl
+			);
+			document.querySelector('#showSelector').value =
+				similarShows[similarShowNumber].id;
+			getAllEpisodes(similarShows[similarShowNumber].id);
+		});
+
+		let similarShowImg = document.createElement('img');
+		similarShowImg.className = 'similar-show-img';
+
+		let similarShowNumber = uniqueRandomNumberArray[i];
+
+		if (similarShows[similarShowNumber].image == null) {
+			similarShows[similarShowNumber].image.medium =
+				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
+		}
+
+		similarShowImg.src = similarShows[similarShowNumber].image.medium;
+		similarShowsItem.append(similarShowImg);
+
+		let similarShowGenres = document.createElement('p');
+		similarShowGenres.className = 'similar-show-genres';
+		similarShows[similarShowNumber].genres.forEach((genre) => {
+			similarShowGenres.textContent += `${genre}, `;
+		});
+		similarShowGenres.textContent = similarShowGenres.textContent.slice(0, -2);
+		similarShowsItem.append(similarShowGenres);
+
+		let similarShowName = document.createElement('h3');
+		similarShowName.className = 'similar-show-name';
+		similarShowName.textContent = similarShows[similarShowNumber].name;
+		similarShowsItem.append(similarShowName);
+	}
+}
+
 let backgroundImages = [
 	{
 		id: 1632,
@@ -451,54 +625,141 @@ let backgroundImages = [
 	},
 	{
 		id: 768,
-		url: '../img/768.jpg',
+		name: 'Planet Earth',
+		url: 'https://i0.wp.com/image.tmdb.org/t/p/w780/dFiK4HA16HSc8U6TCjKskU17Scb.jpg',
 	},
 	{
 		id: 169,
-		url: '../img/169.jpg',
+		name: 'Breaking Bad',
+		url: 'https://f.vividscreen.info/soft/7388ad061cef8c3c8addad40c0c9223c/Breaking-Bad-New-Season-1280x800.jpg',
 	},
 	{
 		id: 179,
-		url: '../img/179.jpg',
+		name: 'The Wire',
+		url: 'https://delagarde.nl/cache/i/1000/image/1225.w1024.9f8961b.4e63337.q80.jpg',
 	},
 	{
 		id: 180,
-		url: '../img/180.jpg',
+		name: 'Firefly',
+		url: 'https://lordsofgaming.net/wp-content/uploads/2020/12/Firefly-reboot-lords-of-gaming.jpg',
 	},
 	{
 		id: 204,
-		url: '../img/204.jpg',
+		name: 'Stargate SG-1',
+		url: 'https://www.desktopbackground.org/download/1280x1024/2013/04/30/568875_stargate-project-de_1920x1080_h.jpg',
 	},
 	{
 		id: 565,
 		name: 'Deadwood',
-		url: '../img/565.jpg',
+		url: 'https://img.wallpapersafari.com/desktop/1440/900/71/9/Y6kfgW.jpg',
 	},
 	{
 		id: 523,
 		name: 'The West Wing',
-		url: '../img/523.jpg',
+		url: 'https://www.reviews.org/au/app/uploads/2020/09/west-wing.jpg',
 	},
 	{
 		id: 527,
 		name: 'The Sopranos',
-		url: '../img/527.jpg',
+		url: 'https://picfiles.alphacoders.com/295/295477.jpg',
 	},
 	{
 		id: 748,
 		name: 'Oz',
-		url: '../img/748.jpg',
+		url: 'https://www.serialchic.it/wp-content/uploads/2016/11/oz.jpg',
 	},
 	{
 		id: 1910,
 		name: 'Bron / Broen',
-		url: '../img/1910.jpg',
+		url: 'https://ic.pics.livejournal.com/qq21/31448256/376083/376083_original.jpg',
 	},
 	{
 		id: 396,
 		name: 'Gravity Falls',
-		url: '../img/396.jpg',
+		url: 'https://simkl.net/fanart/65/6515226f5a47d7cb_0.jpg',
+	},
+	{
+		id: 335,
+		name: 'Sherlock',
+		url: 'https://look.com.ua/pic/201710/1280x768/look.com.ua-248980.jpg',
+	},
+	{
+		id: 251,
+		url: 'https://www.enligto.se/wp-content/uploads/2015/11/downtown-abbey-spoilers-on-google-1024x576.jpg',
+		name: 'Downton Abbey',
+	},
+	{
+		id: 216,
+		url: 'https://cdn.vashurok.ru/system/news/images/000/005/054/og/d22bc9eedf12e32f5a1f654ab18c7c66.jpg?1613387105',
+		name: 'Rick and Morty',
+	},
+	{
+		id: 82,
+		url: 'https://pbs.twimg.com/media/D6-kSYXWkAIlyxZ.jpg',
+		name: 'Game of Thrones',
+	},
+	{
+		id: 1339,
+		url: 'http://images1.fanpop.com/images/image_uploads/Sharp-Compassion-2x04-wire-in-the-blood-1180741_1024_576.jpg',
+		name: 'Wire in the Blood',
+	},
+	{
+		id: 3167,
+		url: 'https://cdn.idntimes.com/content-images/community/2018/09/2f2583fda237ea9f0f078f13dde39223.jpg',
+		name: 'Yong Pal',
+	},
+	{
+		id: 166,
+		url: 'https://www.tvinsider.com/wp-content/uploads/2017/09/battlestar-galactica_9s1GjF-1014x570.jpg',
+		name: 'Battlestar Galactica',
+	},
+	{
+		id: 3327,
+		url: 'https://media-cldnry.s-nbcnews.com/image/upload/newscms/2017_04/1190621/dick-van-dyke-mary-tyler-moor-today-170126-tease-01.jpg',
+		name: 'The Dick Van Dyke Show',
+	},
+	{
+		id: 677,
+		url: 'https://mtdata.ru/u15/photo2C04/20466379008-0/original.jpg',
+		name: 'Rome',
+	},
+	{
+		id: 663,
+		url: 'https://img.myflixer.to/xxrz/1200x600/201/ae/fa/aefad84a8cf0f9517df3edec604fd6f4/aefad84a8cf0f9517df3edec604fd6f4.jpg',
+		name: 'The Shield',
+	},
+	{
+		id: 3392,
+		url: 'https://trikky.ru/wp-content/blogs.dir/1/files/2020/10/20/the-originals-5-season-promo.jpg',
+		name: 'Les Témoins',
+	},
+	{
+		id: 538,
+		url: 'https://www.themoviedb.org/t/p/w1000_and_h563_face/ubFM3JrH3p6BtCHWAlOuboC1obg.jpg',
+		name: 'Futurama',
+	},
+	{
+		id: 1505,
+		url: 'https://pbs.twimg.com/media/EuC7J23VgAATv6D.jpg',
+		name: 'One Piece',
+	},
+	{
+		id: 3704,
+		url: 'http://1.bp.blogspot.com/-FtLw217X_DM/Uwbo3-lUjAI/AAAAAAAACq4/40eBe0YUwe8/w1200-h630-p-k-no-nu/my+love+from+another+stars.jpg',
+		name: 'My Love from Another Star',
+	},
+	{
+		id: 118,
+		url: 'https://www.themoviedb.org/t/p/w1000_and_h563_face/rScuTLhg1v1ZSUlloMymbjTuAeI.jpg',
+		name: 'House',
+	},
+	{
+		id: 32,
+		url: 'http://www.tvmaze.com/shows/32/fargo',
+		name: 'Fargo',
 	},
 ];
 
-window.onload = setup;
+// window.onload = makeCurrentShowPage;
+
+window.onload = makeHomePage;
