@@ -20,10 +20,15 @@ function makeHomePage() {
 	buildShowSelector(allShows);
 
 	let uniqueRandomNumberArray = [];
+	let uniqueNumbersArray = [];
 
 	// Filling array for similar shows
-	for (let i = 0; i < 300; i++) {
+	for (let i = 0; i < allShows.length; i++) {
 		uniqueRandomNumberArray.push(i);
+	}
+
+	for (let i = 0; i < allShows.length; i++) {
+		uniqueNumbersArray.push(i);
 	}
 
 	// Shuffle
@@ -35,7 +40,7 @@ function makeHomePage() {
 		}
 	});
 
-	makeShowRow(uniqueRandomNumberArray, showsWithAPoster, allShows);
+	renderShowRow(uniqueRandomNumberArray, showsWithAPoster, allShows);
 
 	// Making page for episodes
 	let currentShowId;
@@ -43,67 +48,8 @@ function makeHomePage() {
 
 	// Select show
 	showSelector.addEventListener('change', () => {
-		window.scrollTo({
-			top: 0,
-			behavior: 'smooth',
-		});
-
-		document.querySelector('.show-info').style.display = 'flex';
-
-		document.getElementById('root').innerHTML = '';
-
-		filter.style.display = 'block';
-		document.querySelector('.selector-box').style.display = 'block';
-		document.querySelector('#orResult').style.display = 'block';
-		document.querySelector('.search-box').style.display = 'block';
-		document.querySelector('.episode-selector button').style.display =
-			'inline-block';
-
-		//Geting current show
 		currentShowId = showSelector.value;
-		let newAllShows = allShows.filter((show) => {
-			if (show.id == currentShowId) {
-				return true;
-			}
-		});
-		let currentShow = newAllShows[0];
-
-		let currentShowObject = backgroundImages.filter((bgShow) => {
-			return bgShow.id == currentShow.id;
-		});
-		let currentShowBackgroundUrl;
-		if (!(currentShowObject.length == 0) || currentShowObject == undefined) {
-			currentShowBackgroundUrl = currentShowObject[0].url;
-		} else {
-			currentShowBackgroundUrl = defaultBackground;
-		}
-		// console.log(currentShowBackground);
-		// header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackground}') top/cover `;
-
-		let promiseFunction = function (url) {
-			return new Promise((resolve, reject) => {
-				let img = new Image();
-				img.src = currentShowBackgroundUrl;
-
-				img.onload = () => {
-					resolve();
-				};
-				img.onerror = () => {
-					reject(error);
-				};
-			});
-		};
-
-		promiseFunction(currentShowBackgroundUrl).then(
-			() => {
-				renderCurrentShow(currentShow, currentShowBackgroundUrl);
-				makeSimilarShowList(currentShow, allShows, currentShowBackgroundUrl);
-			},
-			(error) => {
-				console.log(error);
-			}
-		);
-
+		makePageForSelectedShow(currentShowId, allShows);
 		getAllEpisodes(currentShowId);
 	});
 
@@ -116,6 +62,7 @@ function makeHomePage() {
 		showSelector.value = 'chooseAShow';
 		filter.style.display = 'none';
 		root.textContent = '';
+		content.style.display = 'block';
 	});
 
 	function makeFilter() {
@@ -158,8 +105,6 @@ function makeHomePage() {
 		});
 	}
 	makeFilter();
-
-	
 
 	function buildShowFilter() {
 		let arr_EN = [
@@ -211,6 +156,8 @@ function makeHomePage() {
 			item.append(numberOfShows);
 
 			item.addEventListener('click', () => {
+				item.style.backgroundColor = '#17e69d';
+				item.style.color = '#151735';
 				let filteredShowsByLetter;
 				if (letter.textContent == '0-9') {
 					let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -233,21 +180,31 @@ function makeHomePage() {
 					});
 				}
 				filteredShows = filteredShowsByLetter;
+
+				document.querySelector('.content-inner').textContent = '';
+				if (filteredShows.length == 0) {
+					let span = document.createElement('span');
+					span.className = 'empty-message'
+					span.textContent = 'Sorry, we have nothing to show you. Try to filter different way'
+					document.querySelector('.content-inner').append(span);
+				} else {
+					renderShows(uniqueNumbersArray, filteredShows, allShows);
+				}
 			});
 		}
-
 	}
-
 	buildShowFilter();
+
+	renderShows(uniqueRandomNumberArray, allShows, allShows);
 }
 
-function makeCurrentShowPage() {
-	let allShows = getAllShows();
-	// buildShowSelector(allShows);
+// function makeCurrentShowPage() {
+// 	let allShows = getAllShows();
+// 	// buildShowSelector(allShows);
 
-	let header = document.querySelector('.header');
-	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${defaultBackground}') top/cover`;
-}
+// 	let header = document.querySelector('.header');
+// 	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${defaultBackground}') top/cover`;
+// }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
 	// Render currernt show details in the header
@@ -495,7 +452,7 @@ function makeSimilarShowList(
 
 	// Render similar shows
 
-	makeShowRow(uniqueRandomNumberArray, similarShows, allShowsList);
+	renderShowRow(uniqueRandomNumberArray, similarShows, allShowsList);
 }
 
 function getAllEpisodes(currentShowId) {
@@ -533,7 +490,7 @@ function shuffle(arr) {
 	return arr;
 }
 
-function makeShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
+function renderShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
 	let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
 	similarShowsWrapper.textContent = '';
 
@@ -542,47 +499,15 @@ function makeShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
 		similarShowsItem.className = 'similar-shows-item';
 		similarShowsWrapper.append(similarShowsItem);
 
+		let similarShowNumber = uniqueRandomNumberArray[i];
+
 		similarShowsItem.addEventListener('click', () => {
-			window.scrollTo({
-				top: 0,
-				behavior: 'smooth',
-			});
-
-			document.querySelector('.show-info').style.display = 'flex';
-			filter.style.display = 'block';
-
-			let defaultBackground = 'https://i.ibb.co/ZGTZH8R/k-LAVl-croper-ru.jpg';
-
-			currentShowBackgroundUrl = defaultBackground;
-
-			backgroundImages.forEach((object) => {
-				if (object.id == similarShows[similarShowNumber].id) {
-					currentShowBackgroundUrl = object.url;
-					console.log(object.url);
-				}
-			});
-			console.log(currentShowBackgroundUrl);
-
-			// currentShowBackgroundUrl = similarShows[similarShowNumber].url;
-
-			renderCurrentShow(
-				similarShows[similarShowNumber],
-				currentShowBackgroundUrl
-			);
-			makeSimilarShowList(
-				similarShows[similarShowNumber],
-				allShowsList,
-				currentShowBackgroundUrl
-			);
-			document.querySelector('#showSelector').value =
-				similarShows[similarShowNumber].id;
+			makePageForSelectedShow(similarShows[similarShowNumber].id, allShowsList);
 			getAllEpisodes(similarShows[similarShowNumber].id);
 		});
 
 		let similarShowImg = document.createElement('img');
 		similarShowImg.className = 'similar-show-img';
-
-		let similarShowNumber = uniqueRandomNumberArray[i];
 
 		if (similarShows[similarShowNumber].image == null) {
 			similarShows[similarShowNumber].image.medium =
@@ -605,6 +530,163 @@ function makeShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
 		similarShowName.textContent = similarShows[similarShowNumber].name;
 		similarShowsItem.append(similarShowName);
 	}
+}
+
+function renderShows(uniqueRandomNumberArray, showList, allShowsList) {
+	let contentInner = document.querySelector('.content-inner');
+
+	for (let i = 0; i < showList.length; i++) {
+		let show = document.createElement('div');
+		show.className = 'content-item';
+		contentInner.append(show);
+
+		let posterBox = document.createElement('div');
+		posterBox.className = 'show-poster-box';
+		show.append(posterBox);
+
+		let img = document.createElement('img');
+		img.className = 'show-poster';
+
+		if (!(showList[uniqueRandomNumberArray[i]].image == undefined)) {
+			img.src = showList[uniqueRandomNumberArray[i]].image.medium;
+		} else {
+			img.src =
+				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
+		}
+		posterBox.append(img);
+
+		let showInfo = document.createElement('div');
+		showInfo.className = 'show-info-content';
+		show.append(showInfo);
+
+		let showInfoInner = document.createElement('div');
+		showInfoInner.className = 'show-info-inner';
+		showInfo.append(showInfoInner);
+
+		let showName = document.createElement('h2');
+		showName.className = 'show-name';
+		showName.textContent = showList[uniqueRandomNumberArray[i]].name;
+		showInfoInner.append(showName);
+
+		let genres = document.createElement('div');
+		showInfoInner.append(genres);
+		genres.textContent = '';
+		for (
+			let j = 0;
+			j < showList[uniqueRandomNumberArray[i]].genres.length;
+			j++
+		) {
+			let genre = document.createElement('span');
+			genre.textContent = showList[uniqueRandomNumberArray[i]].genres[j];
+			genre.className = 'genre-tag';
+			genres.append(genre);
+		}
+
+		let showSummary = document.createElement('div');
+		showSummary.className = 'show-summary';
+		showSummary.innerHTML = showList[uniqueRandomNumberArray[i]].summary;
+		showInfoInner.append(showSummary);
+
+		if (showSummary.textContent.length > 350) {
+			showSummary.textContent = showSummary.textContent.substr(0, 350);
+			let readMore = document.createElement('a');
+			readMore.textContent = 'read more';
+			readMore.href = '#';
+			readMore.style.color = 'white';
+			showSummary.append('... ');
+			showSummary.append(readMore);
+		}
+
+		let whatchButton = document.createElement('button');
+		whatchButton.classList = 'button more-button';
+		whatchButton.textContent = 'Watch now';
+		showInfo.append(whatchButton);
+
+		whatchButton.addEventListener('click', () => {
+			makePageForSelectedShow(
+				showList[uniqueRandomNumberArray[i]].id,
+				allShowsList
+			);
+			getAllEpisodes(showList[uniqueRandomNumberArray[i]].id);
+		});
+
+		// Making hover effect
+		show.addEventListener('mouseenter', () => {
+			whatchButton.style.display = 'inline';
+			show.style.background =
+				'linear-gradient(90deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
+		});
+		show.addEventListener('mouseleave', () => {
+			whatchButton.style.display = 'none';
+			show.style.boxShadow = 'none';
+			show.style.background = 'none';
+		});
+	}
+}
+
+function makePageForSelectedShow(showId, allShows) {
+	window.scrollTo({
+		top: 0,
+		behavior: 'instant',
+	});
+
+	document.querySelector('.show-info').style.display = 'flex';
+
+	document.getElementById('root').innerHTML = '';
+
+	filter.style.display = 'block';
+	document.querySelector('.selector-box').style.display = 'block';
+	document.querySelector('#orResult').style.display = 'block';
+	document.querySelector('.search-box').style.display = 'block';
+	document.querySelector('.episode-selector button').style.display =
+		'inline-block';
+
+	content.style.display = 'none';
+
+	//Geting current show for finding bg
+
+	let newAllShows = allShows.filter((show) => {
+		if (show.id == showId) {
+			return true;
+		}
+	});
+	let currentShow = newAllShows[0];
+
+	let currentShowObject = backgroundImages.filter((bgShow) => {
+		return bgShow.id == currentShow.id;
+	});
+
+	let defaultBackground = 'https://i.ibb.co/ZGTZH8R/k-LAVl-croper-ru.jpg';
+	let currentShowBackgroundUrl;
+	if (!(currentShowObject.length == 0) || currentShowObject == undefined) {
+		currentShowBackgroundUrl = currentShowObject[0].url;
+	} else {
+		currentShowBackgroundUrl = defaultBackground;
+	}
+
+	let promiseFunction = function (url) {
+		return new Promise((resolve, reject) => {
+			let img = new Image();
+			img.src = currentShowBackgroundUrl;
+
+			img.onload = () => {
+				resolve();
+			};
+			img.onerror = () => {
+				reject(error);
+			};
+		});
+	};
+
+	promiseFunction(currentShowBackgroundUrl).then(
+		() => {
+			renderCurrentShow(currentShow, currentShowBackgroundUrl);
+			makeSimilarShowList(currentShow, allShows, currentShowBackgroundUrl);
+		},
+		(error) => {
+			console.log(error);
+		}
+	);
 }
 
 let backgroundImages = [
