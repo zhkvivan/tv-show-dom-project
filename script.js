@@ -143,6 +143,7 @@ function makeHomePage() {
 		for (let i = 0; i < arr_EN.length; i++) {
 			let item = document.createElement('div');
 			item.className = 'alphabet-item';
+			item.setAttribute('pressed', false);
 			alphabetBox.append(item);
 
 			let letter = document.createElement('span');
@@ -156,39 +157,65 @@ function makeHomePage() {
 			item.append(numberOfShows);
 
 			item.addEventListener('click', () => {
-				item.style.backgroundColor = '#17e69d';
-				item.style.color = '#151735';
-				let filteredShowsByLetter;
-				if (letter.textContent == '0-9') {
-					let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-					filteredShowsByLetter = allShows.filter((show) => {
-						if (
-							numbersArray.some((number) => {
-								if (number == Array.from(show.name)[0]) {
-									return true;
-								}
-							})
-						) {
-							return true;
-						}
+				if (item.getAttribute('pressed') == 'false') {
+					// Реализация механизма переключения
+					let allLetters = document.querySelectorAll('.alphabet-item');
+					Array.from(allLetters).forEach((item) => {
+						item.setAttribute('pressed', 'false');
+						item.style.backgroundColor = '#0c142b';
+						item.style.color = '#449ee0';
 					});
-				} else {
-					filteredShowsByLetter = allShows.filter((show) => {
-						if (letter.textContent == Array.from(show.name)[0]) {
-							return true;
-						}
-					});
-				}
-				filteredShows = filteredShowsByLetter;
 
-				document.querySelector('.content-inner').textContent = '';
-				if (filteredShows.length == 0) {
-					let span = document.createElement('span');
-					span.className = 'empty-message'
-					span.textContent = 'Sorry, we have nothing to show you. Try to filter different way'
-					document.querySelector('.content-inner').append(span);
+					item.setAttribute('pressed', 'true');
+
+					// Выделение цветом чтоб было понятно что буква выбрана
+					item.style.backgroundColor = '#17e69d';
+					item.style.color = '#151735';
+
+					// Получение массива сериалов на определенную букву для рендера
+					let filteredShowsByLetter;
+					if (letter.textContent == '0-9') {
+						let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+						filteredShowsByLetter = allShows.filter((show) => {
+							if (
+								numbersArray.some((number) => {
+									if (number == Array.from(show.name)[0]) {
+										return true;
+									}
+								})
+							) {
+								return true;
+							}
+						});
+					} else {
+						filteredShowsByLetter = allShows.filter((show) => {
+							if (letter.textContent == Array.from(show.name)[0]) {
+								return true;
+							}
+						});
+					}
+
+					filteredShows = filteredShowsByLetter;
+
+					// Обработка случая если нет сериалов на такую букву
+					document.querySelector('.content-inner').textContent = '';
+					if (filteredShows.length == 0) {
+						let span = document.createElement('span');
+						span.className = 'empty-message';
+						span.textContent =
+							'Sorry, we have nothing to show you. Try to filter different way';
+						document.querySelector('.content-inner').append(span);
+					} else {
+						renderShows(uniqueNumbersArray, filteredShows, allShows);
+					}
 				} else {
-					renderShows(uniqueNumbersArray, filteredShows, allShows);
+					// Обработка в случае клика на ту же букву для снятия фильтра
+					item.setAttribute('pressed', 'false');
+					item.style.backgroundColor = '#0c142b';
+					item.style.color = '#449ee0';
+
+					document.querySelector('.content-inner').textContent = '';
+					renderShows(uniqueRandomNumberArray, allShows, allShows);
 				}
 			});
 		}

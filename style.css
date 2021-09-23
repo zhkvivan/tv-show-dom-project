@@ -3,6 +3,10 @@
 	--main-accent: rgb(20, 233, 159);
 }
 
+* {
+	box-sizing: border-box;
+}
+
 html {
 	scroll-behavior: smooth;
 }
@@ -60,7 +64,7 @@ select {
 select:focus-visible,
 input:focus-visible {
 	outline: none;
-	border: none;
+	/* border: none; */
 	border-radius: 50px;
 	box-shadow: 0 0 0 2px var(--main-accent);
 }
@@ -118,7 +122,7 @@ input:focus-visible {
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: start;
-	max-width: 840px;
+	max-width: 780px;
 }
 
 .more-button {
@@ -196,7 +200,7 @@ input:focus-visible {
 
 .similar-shows-wrapper {
 	display: flex;
-	margin: 0 -30.5px;
+	margin: 0 -27.166px;
 	margin-top: 20px;
 	justify-content: space-between;
 }
@@ -204,7 +208,7 @@ input:focus-visible {
 .similar-shows-item {
 	display: flex;
 	flex-direction: column;
-	margin: 0 30.5px;
+	margin: 0 27.166px;
 	cursor: pointer;
 }
 
@@ -258,7 +262,6 @@ input:focus-visible {
 .similar-show-name {
 	font-weight: bold;
 	font-size: 15px;
-	
 }
 
 #filter {
@@ -277,20 +280,56 @@ input:focus-visible {
 
 .main-filter {
 	width: 350px;
-	height: 600px;
+	height: 1000px;
+	padding: 30px;
+	padding-top: 20px;
 	position: sticky;
 	top: 50px;
 	left: 0;
 	background-color: #1d2233;
-
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
+
+.filter-search-box {
+	margin: 30px 0;
+	width: 100%;
+	/* padding: 0 30px; */
+}
+
+.search-input {
+	font-size: 16px;
+	border: 2px solid #121930;
+	border-radius: 50px;
+	padding-left: 30px;
+	width: 100%;
+	height: 44px;
+}
+
+.filter-desc {
+	display: none;
+	width: 100%;
+	padding-bottom: 20px;
+	color: white;
+	font-size: 20px;
+	font-family: 'Urbanist', sans-serif;
+	font-weight: 300;
+}
+
+.filter-desc span {
+	display: block;
+	padding-bottom: 10px;
+	border-bottom: 1px solid black;
+}
+
 .alphabet-box {
-	padding: 0 10px;
+	/* padding: 0 10px; */
+	margin: 0 -5px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 }
-
 
 .alphabet-item {
 	width: 60px;
@@ -306,17 +345,16 @@ input:focus-visible {
 }
 
 .content-inner {
-	width: 1100px;
+	max-width: 1060px;
 	margin-top: -30px;
 	display: flex;
 	flex-direction: column;
-
 }
 
 .content-item {
 	display: flex;
 	margin: 30px 0;
-	border-bottom: 1px solid rgb(36, 49, 55)
+	border-bottom: 1px solid rgb(36, 49, 55);
 }
 
 .content-item .show-poster-box {
@@ -353,13 +391,6 @@ input:focus-visible {
 	margin-right: 20px;
 }
 
-.search-input {
-	font-size: 16px;
-	border: 2px solid #121930;
-	border-radius: 50px;
-	padding: 2px;
-	width: 280px;
-}
 #episodeSelector,
 #searchBoxInput {
 	font-size: 16px;
@@ -440,7 +471,6 @@ input:focus-visible {
 .episode-description a {
 	color: inherit;
 }
-
 
 .empty-message {
 	margin-top: 50px;
