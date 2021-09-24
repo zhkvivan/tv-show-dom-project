@@ -19,20 +19,20 @@ function makeHomePage() {
 	let allShows = getAllShows();
 	buildShowSelector(allShows);
 
-	let uniqueRandomNumberArray = [];
+	// let uniqueRandomNumberArray = [];
 	let uniqueNumbersArray = [];
 
-	// Filling array for similar shows
-	for (let i = 0; i < allShows.length; i++) {
-		uniqueRandomNumberArray.push(i);
-	}
+	// // Filling array for similar shows
+	// for (let i = 0; i < allShows.length; i++) {
+	// 	uniqueRandomNumberArray.push(i);
+	// }
 
 	for (let i = 0; i < allShows.length; i++) {
 		uniqueNumbersArray.push(i);
 	}
 
-	// Shuffle
-	shuffle(uniqueRandomNumberArray);
+	// // Shuffle
+	// shuffle(uniqueRandomNumberArray);
 
 	let showsWithAPoster = allShows.filter((show) => {
 		if (!(show.image == null)) {
@@ -40,7 +40,7 @@ function makeHomePage() {
 		}
 	});
 
-	renderShowRow(uniqueRandomNumberArray, showsWithAPoster, allShows);
+	renderShowRow(showsWithAPoster, allShows);
 
 	// Making page for episodes
 	let currentShowId;
@@ -65,7 +65,7 @@ function makeHomePage() {
 		content.style.display = 'block';
 	});
 
-	function makeFilter() {
+	function makeEpisodeFilter() {
 		// Search
 		let searchBoxInput = document.getElementById('searchBoxInput');
 		let filteredEpisodes = [];
@@ -104,7 +104,7 @@ function makeHomePage() {
 			makePageForEpisodes(allEpisodes);
 		});
 	}
-	makeFilter();
+	makeEpisodeFilter();
 
 	function buildShowFilter() {
 		let arr_EN = [
@@ -206,7 +206,8 @@ function makeHomePage() {
 							'Sorry, we have nothing to show you. Try to filter different way';
 						document.querySelector('.content-inner').append(span);
 					} else {
-						renderShows(uniqueNumbersArray, filteredShows, allShows);
+						renderedShowsArray = [];
+						renderShows(filteredShows, allShows, renderedShowsArray);
 					}
 				} else {
 					// Обработка в случае клика на ту же букву для снятия фильтра
@@ -215,23 +216,39 @@ function makeHomePage() {
 					item.style.color = '#449ee0';
 
 					document.querySelector('.content-inner').textContent = '';
-					renderShows(uniqueRandomNumberArray, allShows, allShows);
+					renderedShowsArray = [];
+					renderShows(allShows, allShows, renderedShowsArray);
 				}
 			});
 		}
 	}
-	buildShowFilter();
 
-	renderShows(uniqueRandomNumberArray, allShows, allShows);
+	let allShowsForRender = prepareShowListArr(allShows);
+	let renderedShowsArray = [];
+	renderShows(allShowsForRender, allShows);
+	// console.log(renderedShowsArray);
+
+	buildShowFilter();
+	buildShowSearch(allShows, allShowsForRender);
 }
 
-// function makeCurrentShowPage() {
-// 	let allShows = getAllShows();
-// 	// buildShowSelector(allShows);
+function buildShowSearch(allShows, renderedShowsArray) {
+	let searchResultArray = [];
+	showSearchInput.addEventListener('keyup', () => {
+		// console.log(renderedShowsArray);
 
-// 	let header = document.querySelector('.header');
-// 	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${defaultBackground}') top/cover`;
-// }
+		searchResultArray = renderedShowsArray.filter((show) => {
+			if (
+				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase())
+			) {
+				return true;
+			}
+		});
+		document.querySelector('.content-inner').textContent = '';
+		console.log(searchResultArray);
+		renderShows(searchResultArray, allShows);
+	});
+}
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
 	// Render currernt show details in the header
@@ -479,7 +496,7 @@ function makeSimilarShowList(
 
 	// Render similar shows
 
-	renderShowRow(uniqueRandomNumberArray, similarShows, allShowsList);
+	renderShowRow(similarShows, allShowsList);
 }
 
 function getAllEpisodes(currentShowId) {
@@ -517,9 +534,18 @@ function shuffle(arr) {
 	return arr;
 }
 
-function renderShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
+function renderShowRow(similarShows, allShowsList) {
 	let similarShowsWrapper = document.querySelector('.similar-shows-wrapper');
 	similarShowsWrapper.textContent = '';
+
+	let uniqueRandomNumberArray = [];
+
+	// Filling array for similar shows
+	for (let i = 0; i < allShowsList.length; i++) {
+		uniqueRandomNumberArray.push(i);
+	}
+	// Shuffle
+	shuffle(uniqueRandomNumberArray);
 
 	for (let i = 0; i < 7; i++) {
 		let similarShowsItem = document.createElement('div');
@@ -559,10 +585,41 @@ function renderShowRow(uniqueRandomNumberArray, similarShows, allShowsList) {
 	}
 }
 
-function renderShows(uniqueRandomNumberArray, showList, allShowsList) {
-	let contentInner = document.querySelector('.content-inner');
+function prepareShowListArr(showList) {
+	let uniqueRandomNumberArray = [];
+
+	// Filling array for similar shows
+	for (let i = 0; i < showList.length; i++) {
+		uniqueRandomNumberArray.push(i);
+	}
+	// Shuffle
+	shuffle(uniqueRandomNumberArray);
+
+	let newArr = [];
 
 	for (let i = 0; i < showList.length; i++) {
+		newArr.push(showList[uniqueRandomNumberArray[i]]);
+	}
+
+	return newArr;
+}
+
+function renderShows111(showList, allShowsList, newArr) {
+	let contentInner = document.querySelector('.content-inner');
+
+	let uniqueRandomNumberArray = [];
+
+	// Filling array for similar shows
+	for (let i = 0; i < showList.length; i++) {
+		uniqueRandomNumberArray.push(i);
+	}
+	// Shuffle
+	shuffle(uniqueRandomNumberArray);
+
+	// newArr = [];
+	for (let i = 0; i < showList.length; i++) {
+		newArr.push(showList[uniqueRandomNumberArray[i]]);
+
 		let show = document.createElement('div');
 		show.className = 'content-item';
 		contentInner.append(show);
@@ -635,6 +692,101 @@ function renderShows(uniqueRandomNumberArray, showList, allShowsList) {
 				allShowsList
 			);
 			getAllEpisodes(showList[uniqueRandomNumberArray[i]].id);
+		});
+
+		// Making hover effect
+		show.addEventListener('mouseenter', () => {
+			whatchButton.style.display = 'inline';
+			show.style.background =
+				'linear-gradient(90deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
+		});
+		show.addEventListener('mouseleave', () => {
+			whatchButton.style.display = 'none';
+			show.style.boxShadow = 'none';
+			show.style.background = 'none';
+		});
+	}
+	newArr = 5;
+	console.log(newArr);
+}
+
+function renderShows(showList, allShowsList) {
+	let contentInner = document.querySelector('.content-inner');
+
+	for (let i = 0; i < showList.length; i++) {
+
+		let show = document.createElement('div');
+		show.className = 'content-item';
+		contentInner.append(show);
+
+		let posterBox = document.createElement('div');
+		posterBox.className = 'show-poster-box';
+		show.append(posterBox);
+
+		let img = document.createElement('img');
+		img.className = 'show-poster';
+
+		if (!(showList[i].image == undefined)) {
+			img.src = showList[i].image.medium;
+		} else {
+			img.src =
+				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
+		}
+		posterBox.append(img);
+
+		let showInfo = document.createElement('div');
+		showInfo.className = 'show-info-content';
+		show.append(showInfo);
+
+		let showInfoInner = document.createElement('div');
+		showInfoInner.className = 'show-info-inner';
+		showInfo.append(showInfoInner);
+
+		let showName = document.createElement('h2');
+		showName.className = 'show-name';
+		showName.textContent = showList[i].name;
+		showInfoInner.append(showName);
+
+		let genres = document.createElement('div');
+		showInfoInner.append(genres);
+		genres.textContent = '';
+		for (
+			let j = 0;
+			j < showList[i].genres.length;
+			j++
+		) {
+			let genre = document.createElement('span');
+			genre.textContent = showList[i].genres[j];
+			genre.className = 'genre-tag';
+			genres.append(genre);
+		}
+
+		let showSummary = document.createElement('div');
+		showSummary.className = 'show-summary';
+		showSummary.innerHTML = showList[i].summary;
+		showInfoInner.append(showSummary);
+
+		if (showSummary.textContent.length > 350) {
+			showSummary.textContent = showSummary.textContent.substr(0, 350);
+			let readMore = document.createElement('a');
+			readMore.textContent = 'read more';
+			readMore.href = '#';
+			readMore.style.color = 'white';
+			showSummary.append('... ');
+			showSummary.append(readMore);
+		}
+
+		let whatchButton = document.createElement('button');
+		whatchButton.classList = 'button more-button';
+		whatchButton.textContent = 'Watch now';
+		showInfo.append(whatchButton);
+
+		whatchButton.addEventListener('click', () => {
+			makePageForSelectedShow(
+				showList[i].id,
+				allShowsList
+			);
+			getAllEpisodes(showList[i].id);
 		});
 
 		// Making hover effect
@@ -868,7 +1020,5 @@ let backgroundImages = [
 		name: 'Fargo',
 	},
 ];
-
-// window.onload = makeCurrentShowPage;
 
 window.onload = makeHomePage;
