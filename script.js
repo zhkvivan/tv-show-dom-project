@@ -227,25 +227,12 @@ function makeHomePage() {
 						document.querySelector('.content-inner').append(span);
 					} else {
 						if (!(showSearchInput.value == '')) {
-							console.log('не пусто');
-							// let searchResultArray = [];
-							// searchResultArray = filteredShows.filter((show) => {
-							// 	if (
-							// 		show.name
-							// 			.toLowerCase()
-							// 			.includes(showSearchInput.value.toLowerCase())
-							// 	) {
-							// 		return true;
-							// 	}
-							// });
-							// document.querySelector('.content-inner').textContent = '';
-							// renderShows(searchResultArray, allShows);
-							showSearch(allShows, filteredShows);
+							
+							// showSearch(allShows, filteredShows);
 						} else {
-							buildShowSearch(allShows, filteredShows);
+							// buildShowSearch(allShows, filteredShows);
 							renderShows(filteredShows, allShows);
 						}
-						// renderedShowsArray = [];
 					}
 				} else {
 					// Обработка в случае клика на ту же букву для снятия фильтра
@@ -256,20 +243,9 @@ function makeHomePage() {
 					document.querySelector('.content-inner').textContent = '';
 					// renderedShowsArray = [];
 					if (!(showSearchInput.value == '')) {
-						// let searchResultArray = [];
-						// searchResultArray = allShows.filter((show) => {
-						// 	if (
-						// 		show.name
-						// 			.toLowerCase()
-						// 			.includes(showSearchInput.value.toLowerCase())
-						// 	) {
-						// 		return true;
-						// 	}
-						// });
-						// document.querySelector('.content-inner').textContent = '';
-						// renderShows(searchResultArray, allShows);
-						showSearch(allShows, allShows);
-						buildShowSearch(allShows, allShows);
+						
+						// showSearch(allShows, allShows);
+						// buildShowSearch(allShows, allShows);
 					} else {
 						renderShows(allShows, allShows);
 					}
@@ -283,48 +259,12 @@ function makeHomePage() {
 	renderShows(allShowsForRender, allShows);
 
 	buildShowFilter();
-	buildShowSearch(allShows, allShowsForRender);
-}
-
-function showSearch(allShows, showsForSearching) {
-	let searchResultArray = [];
-	let inTitles = document.querySelector('#inTitles');
-	if (inTitles.checked) {
-		searchResultArray = showsForSearching.filter((show) => {
-			if (
-				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase())
-			) {
-				return true;
-			}
-		});
-	} else {
-		searchResultArray = showsForSearching.filter((show) => {
-			if (
-				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase()) ||
-				show.summary.toLowerCase().includes(showSearchInput.value.toLowerCase())
-			) {
-				return true;
-			}
-		});
-	}
-	document.querySelector('.content-inner').textContent = '';
-	renderShows(searchResultArray, allShows);
-}
-
-function buildShowSearch(allShows, showsForSearching) {
-	// showSearchInput.removeEventListener('keyup', func);
-	// function func () {
-	// 	showSearch(allShows, showsForSearching);
-	// }
-	// showSearchInput.addEventListener('keyup', func);
-		// inTitles.addEventListener('click', () => {
-		// 	showSearch(allShows, showsForSearching);
-		// });
-		// inTitlesAndText.addEventListener('click', () => {
-		// 	showSearch(allShows, showsForSearching);
-		// });
 	
 }
+
+
+
+
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
 	// Render currernt show details in the header
