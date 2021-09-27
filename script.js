@@ -153,7 +153,27 @@ function makeHomePage() {
 
 			let numberOfShows = document.createElement('span');
 			numberOfShows.className = 'alphabet-number';
-			numberOfShows.textContent = '33';
+			let letterArr = allShows.filter((show) => {
+				let nameArr = Array.from(show.name);
+				// console.log(nameArr);
+				if (arr_EN[i] == '0-9') {
+					let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+					if (
+						arr.some((number) => {
+							if (number == nameArr[0]) {
+								return true;
+							}
+						})
+					) {
+						return true;
+					}
+				} else {
+					if (nameArr[0] == arr_EN[i]) {
+						return show;
+					}
+				}
+			});
+			numberOfShows.textContent = letterArr.length;
 			item.append(numberOfShows);
 
 			item.addEventListener('click', () => {
@@ -163,14 +183,14 @@ function makeHomePage() {
 					Array.from(allLetters).forEach((item) => {
 						item.setAttribute('pressed', 'false');
 						item.style.backgroundColor = '#0c142b';
-						item.style.color = '#449ee0';
+						item.querySelector('.alphabet-letter').style.color = '#449ee0';
 					});
 
 					item.setAttribute('pressed', 'true');
 
 					// Выделение цветом чтоб было понятно что буква выбрана
 					item.style.backgroundColor = '#17e69d';
-					item.style.color = '#151735';
+					item.querySelector('.alphabet-letter').style.color = '#061e30';
 
 					// Получение массива сериалов на определенную букву для рендера
 					let filteredShowsByLetter;
@@ -206,48 +226,104 @@ function makeHomePage() {
 							'Sorry, we have nothing to show you. Try to filter different way';
 						document.querySelector('.content-inner').append(span);
 					} else {
-						renderedShowsArray = [];
-						renderShows(filteredShows, allShows, renderedShowsArray);
+						if (!(showSearchInput.value == '')) {
+							console.log('не пусто');
+							// let searchResultArray = [];
+							// searchResultArray = filteredShows.filter((show) => {
+							// 	if (
+							// 		show.name
+							// 			.toLowerCase()
+							// 			.includes(showSearchInput.value.toLowerCase())
+							// 	) {
+							// 		return true;
+							// 	}
+							// });
+							// document.querySelector('.content-inner').textContent = '';
+							// renderShows(searchResultArray, allShows);
+							showSearch(allShows, filteredShows);
+						} else {
+							buildShowSearch(allShows, filteredShows);
+							renderShows(filteredShows, allShows);
+						}
+						// renderedShowsArray = [];
 					}
 				} else {
 					// Обработка в случае клика на ту же букву для снятия фильтра
 					item.setAttribute('pressed', 'false');
 					item.style.backgroundColor = '#0c142b';
-					item.style.color = '#449ee0';
+					item.querySelector('.alphabet-letter').style.color = '#449ee0';
 
 					document.querySelector('.content-inner').textContent = '';
-					renderedShowsArray = [];
-					renderShows(allShows, allShows, renderedShowsArray);
+					// renderedShowsArray = [];
+					if (!(showSearchInput.value == '')) {
+						// let searchResultArray = [];
+						// searchResultArray = allShows.filter((show) => {
+						// 	if (
+						// 		show.name
+						// 			.toLowerCase()
+						// 			.includes(showSearchInput.value.toLowerCase())
+						// 	) {
+						// 		return true;
+						// 	}
+						// });
+						// document.querySelector('.content-inner').textContent = '';
+						// renderShows(searchResultArray, allShows);
+						showSearch(allShows, allShows);
+						buildShowSearch(allShows, allShows);
+					} else {
+						renderShows(allShows, allShows);
+					}
 				}
 			});
 		}
 	}
 
 	let allShowsForRender = prepareShowListArr(allShows);
-	let renderedShowsArray = [];
+
 	renderShows(allShowsForRender, allShows);
-	// console.log(renderedShowsArray);
 
 	buildShowFilter();
 	buildShowSearch(allShows, allShowsForRender);
 }
 
-function buildShowSearch(allShows, renderedShowsArray) {
+function showSearch(allShows, showsForSearching) {
 	let searchResultArray = [];
-	showSearchInput.addEventListener('keyup', () => {
-		// console.log(renderedShowsArray);
-
-		searchResultArray = renderedShowsArray.filter((show) => {
+	let inTitles = document.querySelector('#inTitles');
+	if (inTitles.checked) {
+		searchResultArray = showsForSearching.filter((show) => {
 			if (
 				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase())
 			) {
 				return true;
 			}
 		});
-		document.querySelector('.content-inner').textContent = '';
-		console.log(searchResultArray);
-		renderShows(searchResultArray, allShows);
-	});
+	} else {
+		searchResultArray = showsForSearching.filter((show) => {
+			if (
+				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase()) ||
+				show.summary.toLowerCase().includes(showSearchInput.value.toLowerCase())
+			) {
+				return true;
+			}
+		});
+	}
+	document.querySelector('.content-inner').textContent = '';
+	renderShows(searchResultArray, allShows);
+}
+
+function buildShowSearch(allShows, showsForSearching) {
+	showSearchInput.removeEventListener('keyup', func);
+	function func () {
+		showSearch(allShows, showsForSearching);
+	}
+	showSearchInput.addEventListener('keyup', func);
+		// inTitles.addEventListener('click', () => {
+		// 	showSearch(allShows, showsForSearching);
+		// });
+		// inTitlesAndText.addEventListener('click', () => {
+		// 	showSearch(allShows, showsForSearching);
+		// });
+	
 }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
@@ -483,17 +559,6 @@ function makeSimilarShowList(
 	// Shuffle
 	shuffle(uniqueRandomNumberArray);
 
-	// Checking width
-	// if (matchMedia) {
-	// 	let screen = window.matchMedia('(max-width: 1560px)');
-	// 	screen.addListener(changes);
-	// 	changes(screen);
-	// }
-	// function changes(screen) {
-	// 	if (screen.matches) {
-	// 	}
-	// }
-
 	// Render similar shows
 
 	renderShowRow(similarShows, allShowsList);
@@ -541,7 +606,7 @@ function renderShowRow(similarShows, allShowsList) {
 	let uniqueRandomNumberArray = [];
 
 	// Filling array for similar shows
-	for (let i = 0; i < allShowsList.length; i++) {
+	for (let i = 0; i < similarShows.length; i++) {
 		uniqueRandomNumberArray.push(i);
 	}
 	// Shuffle
@@ -562,7 +627,7 @@ function renderShowRow(similarShows, allShowsList) {
 		let similarShowImg = document.createElement('img');
 		similarShowImg.className = 'similar-show-img';
 
-		if (similarShows[similarShowNumber].image == null) {
+		if (similarShows[similarShowNumber].image == undefined) {
 			similarShows[similarShowNumber].image.medium =
 				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
 		}
@@ -714,7 +779,6 @@ function renderShows(showList, allShowsList) {
 	let contentInner = document.querySelector('.content-inner');
 
 	for (let i = 0; i < showList.length; i++) {
-
 		let show = document.createElement('div');
 		show.className = 'content-item';
 		contentInner.append(show);
@@ -750,11 +814,7 @@ function renderShows(showList, allShowsList) {
 		let genres = document.createElement('div');
 		showInfoInner.append(genres);
 		genres.textContent = '';
-		for (
-			let j = 0;
-			j < showList[i].genres.length;
-			j++
-		) {
+		for (let j = 0; j < showList[i].genres.length; j++) {
 			let genre = document.createElement('span');
 			genre.textContent = showList[i].genres[j];
 			genre.className = 'genre-tag';
@@ -782,10 +842,7 @@ function renderShows(showList, allShowsList) {
 		showInfo.append(whatchButton);
 
 		whatchButton.addEventListener('click', () => {
-			makePageForSelectedShow(
-				showList[i].id,
-				allShowsList
-			);
+			makePageForSelectedShow(showList[i].id, allShowsList);
 			getAllEpisodes(showList[i].id);
 		});
 
@@ -819,6 +876,8 @@ function makePageForSelectedShow(showId, allShows) {
 	document.querySelector('.search-box').style.display = 'block';
 	document.querySelector('.episode-selector button').style.display =
 		'inline-block';
+
+	showSelector.value = showId;
 
 	content.style.display = 'none';
 
@@ -868,7 +927,7 @@ function makePageForSelectedShow(showId, allShows) {
 	);
 }
 
-let backgroundImages = [
+const backgroundImages = [
 	{
 		id: 1632,
 		name: 'Horatio Hornblower',
