@@ -227,7 +227,6 @@ function makeHomePage() {
 						document.querySelector('.content-inner').append(span);
 					} else {
 						if (!(showSearchInput.value == '')) {
-							
 							// showSearch(allShows, filteredShows);
 						} else {
 							// buildShowSearch(allShows, filteredShows);
@@ -243,7 +242,6 @@ function makeHomePage() {
 					document.querySelector('.content-inner').textContent = '';
 					// renderedShowsArray = [];
 					if (!(showSearchInput.value == '')) {
-						
 						// showSearch(allShows, allShows);
 						// buildShowSearch(allShows, allShows);
 					} else {
@@ -255,16 +253,25 @@ function makeHomePage() {
 	}
 
 	let allShowsForRender = prepareShowListArr(allShows);
-
 	renderShows(allShowsForRender, allShows);
 
 	buildShowFilter();
-	
+	search(allShowsForRender);
 }
 
-
-
-
+function search(listForSearch) {
+	if (inTitles.checked) {
+		showSearchInput.value = '24';
+		let newArr = listForSearch.filter((show) => {
+			if (showSearchInput.value.toLowerCase() == show.name.toLowerCase()) {
+				console.log(show);
+				return true;
+			}
+		});
+		console.log(newArr)
+	} else {
+	}
+}
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
 	// Render currernt show details in the header
