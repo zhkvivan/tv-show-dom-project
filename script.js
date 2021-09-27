@@ -312,11 +312,11 @@ function showSearch(allShows, showsForSearching) {
 }
 
 function buildShowSearch(allShows, showsForSearching) {
-	showSearchInput.removeEventListener('keyup', func);
-	function func () {
-		showSearch(allShows, showsForSearching);
-	}
-	showSearchInput.addEventListener('keyup', func);
+	// showSearchInput.removeEventListener('keyup', func);
+	// function func () {
+	// 	showSearch(allShows, showsForSearching);
+	// }
+	// showSearchInput.addEventListener('keyup', func);
 		// inTitles.addEventListener('click', () => {
 		// 	showSearch(allShows, showsForSearching);
 		// });
