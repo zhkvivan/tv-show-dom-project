@@ -1,3 +1,37 @@
+let section = '';
+let searchString = '';
+let allShows = getAllShows();
+let arr_EN = [
+	'0-9',
+	'A',
+	'B',
+	'C',
+	'D',
+	'E',
+	'F',
+	'G',
+	'H',
+	'I',
+	'J',
+	'K',
+	'L',
+	'M',
+	'N',
+	'O',
+	'P',
+	'Q',
+	'R',
+	'S',
+	'T',
+	'U',
+	'V',
+	'W',
+	'X',
+	'Y',
+	'Z',
+];
+let allShowsForRender = prepareShowListArr(allShows);
+
 function makeHomePage() {
 	let showInfo = document.querySelector('.show-info');
 	showInfo.style.display = 'none';
@@ -16,7 +50,6 @@ function makeHomePage() {
 
 	filter.style.display = 'none';
 
-	let allShows = getAllShows();
 	buildShowSelector(allShows);
 
 	// let uniqueRandomNumberArray = [];
@@ -107,35 +140,6 @@ function makeHomePage() {
 	makeEpisodeFilter();
 
 	function buildShowFilter() {
-		let arr_EN = [
-			'0-9',
-			'A',
-			'B',
-			'C',
-			'D',
-			'E',
-			'F',
-			'G',
-			'H',
-			'I',
-			'J',
-			'K',
-			'L',
-			'M',
-			'N',
-			'O',
-			'P',
-			'Q',
-			'R',
-			'S',
-			'T',
-			'U',
-			'V',
-			'W',
-			'X',
-			'Y',
-			'Z',
-		];
 		let alphabetBox = document.querySelector('.alphabet-box');
 		let filteredShows;
 
@@ -155,7 +159,6 @@ function makeHomePage() {
 			numberOfShows.className = 'alphabet-number';
 			let letterArr = allShows.filter((show) => {
 				let nameArr = Array.from(show.name);
-				// console.log(nameArr);
 				if (arr_EN[i] == '0-9') {
 					let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 					if (
@@ -177,131 +180,184 @@ function makeHomePage() {
 			item.append(numberOfShows);
 
 			item.addEventListener('click', () => {
-				if (item.getAttribute('pressed') == 'false') {
-					// Реализация механизма переключения
+				if (section == arr_EN[i]) {
+					section = '';
+					item.style.backgroundColor = '#0c142b';
+					item.querySelector('.alphabet-letter').style.color = '#449ee0';
+				} else {
+					section = arr_EN[i];
+
 					let allLetters = document.querySelectorAll('.alphabet-item');
 					Array.from(allLetters).forEach((item) => {
-						item.setAttribute('pressed', 'false');
 						item.style.backgroundColor = '#0c142b';
 						item.querySelector('.alphabet-letter').style.color = '#449ee0';
 					});
 
-					item.setAttribute('pressed', 'true');
-
-					// Выделение цветом чтоб было понятно что буква выбрана
+					// Highlighting current letter/section
 					item.style.backgroundColor = '#17e69d';
 					item.querySelector('.alphabet-letter').style.color = '#061e30';
-
-					// Получение массива сериалов на определенную букву для рендера
-					let filteredShowsByLetter;
-					if (letter.textContent == '0-9') {
-						let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-						filteredShowsByLetter = allShows.filter((show) => {
-							if (
-								numbersArray.some((number) => {
-									if (number == Array.from(show.name)[0]) {
-										return true;
-									}
-								})
-							) {
-								return true;
-							}
-						});
-					} else {
-						filteredShowsByLetter = allShows.filter((show) => {
-							if (letter.textContent == Array.from(show.name)[0]) {
-								return true;
-							}
-						});
-					}
-
-					filteredShows = filteredShowsByLetter;
-
-					// Обработка случая если нет сериалов на такую букву
-					document.querySelector('.content-inner').textContent = '';
-					if (filteredShows.length == 0) {
-						let span = document.createElement('span');
-						span.className = 'empty-message';
-						span.textContent =
-							'Sorry, we have nothing to show you. Try to filter different way';
-						document.querySelector('.content-inner').append(span);
-					} else {
-						if (!(showSearchInput.value == '')) {
-							console.log('не пусто');
-							// let searchResultArray = [];
-							// searchResultArray = filteredShows.filter((show) => {
-							// 	if (
-							// 		show.name
-							// 			.toLowerCase()
-							// 			.includes(showSearchInput.value.toLowerCase())
-							// 	) {
-							// 		return true;
-							// 	}
-							// });
-							// document.querySelector('.content-inner').textContent = '';
-							// renderShows(searchResultArray, allShows);
-							showSearch(allShows, filteredShows);
-						} else {
-							buildShowSearch(allShows, filteredShows);
-							renderShows(filteredShows, allShows);
-						}
-						// renderedShowsArray = [];
-					}
-				} else {
-					// Обработка в случае клика на ту же букву для снятия фильтра
-					item.setAttribute('pressed', 'false');
-					item.style.backgroundColor = '#0c142b';
-					item.querySelector('.alphabet-letter').style.color = '#449ee0';
-
-					document.querySelector('.content-inner').textContent = '';
-					// renderedShowsArray = [];
-					if (!(showSearchInput.value == '')) {
-						// let searchResultArray = [];
-						// searchResultArray = allShows.filter((show) => {
-						// 	if (
-						// 		show.name
-						// 			.toLowerCase()
-						// 			.includes(showSearchInput.value.toLowerCase())
-						// 	) {
-						// 		return true;
-						// 	}
-						// });
-						// document.querySelector('.content-inner').textContent = '';
-						// renderShows(searchResultArray, allShows);
-						showSearch(allShows, allShows);
-						buildShowSearch(allShows, allShows);
-					} else {
-						renderShows(allShows, allShows);
-					}
 				}
+
+				showSearch();
+				console.log(section);
+
+				// if (item.getAttribute('pressed') == 'false') {
+				// 	// Реализация механизма переключения
+				// 	let allLetters = document.querySelectorAll('.alphabet-item');
+				// 	Array.from(allLetters).forEach((item) => {
+				// 		item.setAttribute('pressed', 'false');
+				// 		item.style.backgroundColor = '#0c142b';
+				// 		item.querySelector('.alphabet-letter').style.color = '#449ee0';
+				// 	});
+
+				// 	item.setAttribute('pressed', 'true');
+
+				// 	// Выделение цветом чтоб было понятно что буква выбрана
+				// 	item.style.backgroundColor = '#17e69d';
+				// 	item.querySelector('.alphabet-letter').style.color = '#061e30';
+
+				// 	// Получение массива сериалов на определенную букву для рендера
+				// 	let filteredShowsByLetter;
+				// 	if (letter.textContent == '0-9') {
+				// 		let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+				// 		filteredShowsByLetter = allShows.filter((show) => {
+				// 			if (
+				// 				numbersArray.some((number) => {
+				// 					if (number == Array.from(show.name)[0]) {
+				// 						return true;
+				// 					}
+				// 				})
+				// 			) {
+				// 				return true;
+				// 			}
+				// 		});
+				// 	} else {
+				// 		filteredShowsByLetter = allShows.filter((show) => {
+				// 			if (letter.textContent == Array.from(show.name)[0]) {
+				// 				return true;
+				// 			}
+				// 		});
+				// 	}
+
+				// 	filteredShows = filteredShowsByLetter;
+
+				// 	// Обработка случая если нет сериалов на такую букву
+				// 	document.querySelector('.content-inner').textContent = '';
+				// 	if (filteredShows.length == 0) {
+				// 		let span = document.createElement('span');
+				// 		span.className = 'empty-message';
+				// 		span.textContent =
+				// 			'Sorry, we have nothing to show you. Try to filter different way';
+				// 		document.querySelector('.content-inner').append(span);
+				// 	} else {
+				// 		if (!(showSearchInput.value == '')) {
+				// 			console.log('не пусто');
+				// 			// let searchResultArray = [];
+				// 			// searchResultArray = filteredShows.filter((show) => {
+				// 			// 	if (
+				// 			// 		show.name
+				// 			// 			.toLowerCase()
+				// 			// 			.includes(showSearchInput.value.toLowerCase())
+				// 			// 	) {
+				// 			// 		return true;
+				// 			// 	}
+				// 			// });
+				// 			// document.querySelector('.content-inner').textContent = '';
+				// 			// renderShows(searchResultArray, allShows);
+				// 			showSearch(allShows, filteredShows);
+				// 		} else {
+				// 			buildShowSearch(allShows, filteredShows);
+				// 			renderShows(filteredShows, allShows);
+				// 		}
+				// 		// renderedShowsArray = [];
+				// 	}
+				// } else {
+				// 	// Обработка в случае клика на ту же букву для снятия фильтра
+				// 	item.setAttribute('pressed', 'false');
+				// 	item.style.backgroundColor = '#0c142b';
+				// 	item.querySelector('.alphabet-letter').style.color = '#449ee0';
+
+				// 	document.querySelector('.content-inner').textContent = '';
+				// 	// renderedShowsArray = [];
+				// 	if (!(showSearchInput.value == '')) {
+				// 		// let searchResultArray = [];
+				// 		// searchResultArray = allShows.filter((show) => {
+				// 		// 	if (
+				// 		// 		show.name
+				// 		// 			.toLowerCase()
+				// 		// 			.includes(showSearchInput.value.toLowerCase())
+				// 		// 	) {
+				// 		// 		return true;
+				// 		// 	}
+				// 		// });
+				// 		// document.querySelector('.content-inner').textContent = '';
+				// 		// renderShows(searchResultArray, allShows);
+				// 		showSearch(allShows, allShows);
+				// 		buildShowSearch(allShows, allShows);
+				// 	} else {
+				// 		renderShows(allShows, allShows);
+				// 	}
+				// }
 			});
 		}
 	}
 
-	let allShowsForRender = prepareShowListArr(allShows);
-
 	renderShows(allShowsForRender, allShows);
 
 	buildShowFilter();
-	buildShowSearch(allShows, allShowsForRender);
+
+	function updateSearchString(e) {
+		searchString = e.target.value;
+		showSearch();
+	}
+
+	showSearchInput.addEventListener('input', updateSearchString);
+	
+	inTitles.addEventListener('click', () => {
+		if (searchString == '') {
+			return
+		} else showSearch();
+	});
+	inTitlesAndText.addEventListener('click', () => {
+		if (searchString == '') {
+			return;
+		} else showSearch();
+	});
 }
 
-function showSearch(allShows, showsForSearching) {
+function showSearch() {
 	let searchResultArray = [];
 	let inTitles = document.querySelector('#inTitles');
+
+	// Get all shows and filter them to get only current section's/letter's shows
+	let showsInSection = allShows.filter((show) => {
+		// If no one section has choosen, return true for all shows. Searching in all shows
+		if (section == '') {
+			return true;
+		} else if (section == '0-9') {
+			// Corner case with '0-9' section
+			let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+			if (arr.includes(+show.name[0])) {
+				return true;
+			}
+		} else if (show.name[0] == section) {
+			// Getting shows that start from current letter
+			return true;
+		}
+	});
+
+	// Filter by searchString
 	if (inTitles.checked) {
-		searchResultArray = showsForSearching.filter((show) => {
-			if (
-				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase())
-			) {
+		searchResultArray = showsInSection.filter((show) => {
+			if (show.name.toLowerCase().includes(searchString.toLowerCase())) {
 				return true;
 			}
 		});
 	} else {
-		searchResultArray = showsForSearching.filter((show) => {
+		searchResultArray = showsInSection.filter((show) => {
 			if (
-				show.name.toLowerCase().includes(showSearchInput.value.toLowerCase()) ||
-				show.summary.toLowerCase().includes(showSearchInput.value.toLowerCase())
+				show.name.toLowerCase().includes(searchString.toLowerCase()) ||
+				show.summary.toLowerCase().includes(searchString.toLowerCase())
 			) {
 				return true;
 			}
@@ -309,21 +365,6 @@ function showSearch(allShows, showsForSearching) {
 	}
 	document.querySelector('.content-inner').textContent = '';
 	renderShows(searchResultArray, allShows);
-}
-
-function buildShowSearch(allShows, showsForSearching) {
-	showSearchInput.removeEventListener('keyup', func);
-	function func () {
-		showSearch(allShows, showsForSearching);
-	}
-	showSearchInput.addEventListener('keyup', func);
-		// inTitles.addEventListener('click', () => {
-		// 	showSearch(allShows, showsForSearching);
-		// });
-		// inTitlesAndText.addEventListener('click', () => {
-		// 	showSearch(allShows, showsForSearching);
-		// });
-	
 }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
@@ -450,6 +491,7 @@ function buildShowSelector(allShows) {
 		}
 		return 0;
 	});
+
 	// Making options for all shows
 	allShows.forEach((show) => {
 		let option = document.createElement('option');
