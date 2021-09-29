@@ -1,5 +1,6 @@
 let section = '';
 let searchString = '';
+let currentGenre = '';
 let allShows = getAllShows();
 let arr_EN = [
 	'0-9',
@@ -199,105 +200,6 @@ function makeHomePage() {
 				}
 
 				showSearch();
-				console.log(section);
-
-				// if (item.getAttribute('pressed') == 'false') {
-				// 	// Реализация механизма переключения
-				// 	let allLetters = document.querySelectorAll('.alphabet-item');
-				// 	Array.from(allLetters).forEach((item) => {
-				// 		item.setAttribute('pressed', 'false');
-				// 		item.style.backgroundColor = '#0c142b';
-				// 		item.querySelector('.alphabet-letter').style.color = '#449ee0';
-				// 	});
-
-				// 	item.setAttribute('pressed', 'true');
-
-				// 	// Выделение цветом чтоб было понятно что буква выбрана
-				// 	item.style.backgroundColor = '#17e69d';
-				// 	item.querySelector('.alphabet-letter').style.color = '#061e30';
-
-				// 	// Получение массива сериалов на определенную букву для рендера
-				// 	let filteredShowsByLetter;
-				// 	if (letter.textContent == '0-9') {
-				// 		let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-				// 		filteredShowsByLetter = allShows.filter((show) => {
-				// 			if (
-				// 				numbersArray.some((number) => {
-				// 					if (number == Array.from(show.name)[0]) {
-				// 						return true;
-				// 					}
-				// 				})
-				// 			) {
-				// 				return true;
-				// 			}
-				// 		});
-				// 	} else {
-				// 		filteredShowsByLetter = allShows.filter((show) => {
-				// 			if (letter.textContent == Array.from(show.name)[0]) {
-				// 				return true;
-				// 			}
-				// 		});
-				// 	}
-
-				// 	filteredShows = filteredShowsByLetter;
-
-				// 	// Обработка случая если нет сериалов на такую букву
-				// 	document.querySelector('.content-inner').textContent = '';
-				// 	if (filteredShows.length == 0) {
-				// 		let span = document.createElement('span');
-				// 		span.className = 'empty-message';
-				// 		span.textContent =
-				// 			'Sorry, we have nothing to show you. Try to filter different way';
-				// 		document.querySelector('.content-inner').append(span);
-				// 	} else {
-				// 		if (!(showSearchInput.value == '')) {
-				// 			console.log('не пусто');
-				// 			// let searchResultArray = [];
-				// 			// searchResultArray = filteredShows.filter((show) => {
-				// 			// 	if (
-				// 			// 		show.name
-				// 			// 			.toLowerCase()
-				// 			// 			.includes(showSearchInput.value.toLowerCase())
-				// 			// 	) {
-				// 			// 		return true;
-				// 			// 	}
-				// 			// });
-				// 			// document.querySelector('.content-inner').textContent = '';
-				// 			// renderShows(searchResultArray, allShows);
-				// 			showSearch(allShows, filteredShows);
-				// 		} else {
-				// 			buildShowSearch(allShows, filteredShows);
-				// 			renderShows(filteredShows, allShows);
-				// 		}
-				// 		// renderedShowsArray = [];
-				// 	}
-				// } else {
-				// 	// Обработка в случае клика на ту же букву для снятия фильтра
-				// 	item.setAttribute('pressed', 'false');
-				// 	item.style.backgroundColor = '#0c142b';
-				// 	item.querySelector('.alphabet-letter').style.color = '#449ee0';
-
-				// 	document.querySelector('.content-inner').textContent = '';
-				// 	// renderedShowsArray = [];
-				// 	if (!(showSearchInput.value == '')) {
-				// 		// let searchResultArray = [];
-				// 		// searchResultArray = allShows.filter((show) => {
-				// 		// 	if (
-				// 		// 		show.name
-				// 		// 			.toLowerCase()
-				// 		// 			.includes(showSearchInput.value.toLowerCase())
-				// 		// 	) {
-				// 		// 		return true;
-				// 		// 	}
-				// 		// });
-				// 		// document.querySelector('.content-inner').textContent = '';
-				// 		// renderShows(searchResultArray, allShows);
-				// 		showSearch(allShows, allShows);
-				// 		buildShowSearch(allShows, allShows);
-				// 	} else {
-				// 		renderShows(allShows, allShows);
-				// 	}
-				// }
 			});
 		}
 	}
@@ -309,13 +211,22 @@ function makeHomePage() {
 	function updateSearchString(e) {
 		searchString = e.target.value;
 		showSearch();
+		searchString.length > 0
+			? (clearInputBackspace.style.display = 'block')
+			: (clearInputBackspace.style.display = 'none');
 	}
 
 	showSearchInput.addEventListener('input', updateSearchString);
-	
+
+	clearInputBackspace.addEventListener('click', () => {
+		searchString = '';
+		showSearchInput.value = '';
+		showSearch();
+	});
+
 	inTitles.addEventListener('click', () => {
 		if (searchString == '') {
-			return
+			return;
 		} else showSearch();
 	});
 	inTitlesAndText.addEventListener('click', () => {
@@ -364,7 +275,23 @@ function showSearch() {
 		});
 	}
 	document.querySelector('.content-inner').textContent = '';
-	renderShows(searchResultArray, allShows);
+
+
+	// Checking if final search result has any shows in it
+	if (searchResultArray.length > 0) {
+		// If yes - render those shows
+		renderShows(searchResultArray, allShows);
+	} else {
+		// If no - show a message
+		let container = document.querySelector('.content-inner');
+		let sorry = document.createElement('span');
+		sorry.style.padding = '100px'
+		sorry.style.fontSize = '28px';
+		sorry.style.color = 'white';
+		sorry.style.fontWeight = 'bold';
+		container.append(sorry);
+		sorry.textContent = 'Sorry, we couldn\'t find anything. Try to change your request';
+	}
 }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
@@ -711,112 +638,6 @@ function prepareShowListArr(showList) {
 	return newArr;
 }
 
-function renderShows111(showList, allShowsList, newArr) {
-	let contentInner = document.querySelector('.content-inner');
-
-	let uniqueRandomNumberArray = [];
-
-	// Filling array for similar shows
-	for (let i = 0; i < showList.length; i++) {
-		uniqueRandomNumberArray.push(i);
-	}
-	// Shuffle
-	shuffle(uniqueRandomNumberArray);
-
-	// newArr = [];
-	for (let i = 0; i < showList.length; i++) {
-		newArr.push(showList[uniqueRandomNumberArray[i]]);
-
-		let show = document.createElement('div');
-		show.className = 'content-item';
-		contentInner.append(show);
-
-		let posterBox = document.createElement('div');
-		posterBox.className = 'show-poster-box';
-		show.append(posterBox);
-
-		let img = document.createElement('img');
-		img.className = 'show-poster';
-
-		if (!(showList[uniqueRandomNumberArray[i]].image == undefined)) {
-			img.src = showList[uniqueRandomNumberArray[i]].image.medium;
-		} else {
-			img.src =
-				'https://media.movieassets.com/static/images/items/movies/posters/ddab5e00987cfdfff04a16cb470ca339.jpg';
-		}
-		posterBox.append(img);
-
-		let showInfo = document.createElement('div');
-		showInfo.className = 'show-info-content';
-		show.append(showInfo);
-
-		let showInfoInner = document.createElement('div');
-		showInfoInner.className = 'show-info-inner';
-		showInfo.append(showInfoInner);
-
-		let showName = document.createElement('h2');
-		showName.className = 'show-name';
-		showName.textContent = showList[uniqueRandomNumberArray[i]].name;
-		showInfoInner.append(showName);
-
-		let genres = document.createElement('div');
-		showInfoInner.append(genres);
-		genres.textContent = '';
-		for (
-			let j = 0;
-			j < showList[uniqueRandomNumberArray[i]].genres.length;
-			j++
-		) {
-			let genre = document.createElement('span');
-			genre.textContent = showList[uniqueRandomNumberArray[i]].genres[j];
-			genre.className = 'genre-tag';
-			genres.append(genre);
-		}
-
-		let showSummary = document.createElement('div');
-		showSummary.className = 'show-summary';
-		showSummary.innerHTML = showList[uniqueRandomNumberArray[i]].summary;
-		showInfoInner.append(showSummary);
-
-		if (showSummary.textContent.length > 350) {
-			showSummary.textContent = showSummary.textContent.substr(0, 350);
-			let readMore = document.createElement('a');
-			readMore.textContent = 'read more';
-			readMore.href = '#';
-			readMore.style.color = 'white';
-			showSummary.append('... ');
-			showSummary.append(readMore);
-		}
-
-		let whatchButton = document.createElement('button');
-		whatchButton.classList = 'button more-button';
-		whatchButton.textContent = 'Watch now';
-		showInfo.append(whatchButton);
-
-		whatchButton.addEventListener('click', () => {
-			makePageForSelectedShow(
-				showList[uniqueRandomNumberArray[i]].id,
-				allShowsList
-			);
-			getAllEpisodes(showList[uniqueRandomNumberArray[i]].id);
-		});
-
-		// Making hover effect
-		show.addEventListener('mouseenter', () => {
-			whatchButton.style.display = 'inline';
-			show.style.background =
-				'linear-gradient(90deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
-		});
-		show.addEventListener('mouseleave', () => {
-			whatchButton.style.display = 'none';
-			show.style.boxShadow = 'none';
-			show.style.background = 'none';
-		});
-	}
-	newArr = 5;
-	console.log(newArr);
-}
-
 function renderShows(showList, allShowsList) {
 	let contentInner = document.querySelector('.content-inner');
 
@@ -870,12 +691,17 @@ function renderShows(showList, allShowsList) {
 
 		if (showSummary.textContent.length > 350) {
 			showSummary.textContent = showSummary.textContent.substr(0, 350);
-			let readMore = document.createElement('a');
+			let readMore = document.createElement('span');
 			readMore.textContent = 'read more';
-			readMore.href = '#';
 			readMore.style.color = 'white';
+			readMore.style.textDecoration = 'underline';
+			readMore.style.cursor = 'pointer';
 			showSummary.append('... ');
 			showSummary.append(readMore);
+			readMore.addEventListener('click', () => {
+				makePageForSelectedShow(showList[i].id, allShowsList);
+				getAllEpisodes(showList[i].id);
+			});
 		}
 
 		let whatchButton = document.createElement('button');
