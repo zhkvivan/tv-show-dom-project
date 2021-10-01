@@ -5,18 +5,18 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>TV Show Project | Ivan (zhkvivan)</title>
-	<link href="style.css" rel="stylesheet" />
 	<link href="normalize.css" rel="stylesheet" />
+	<link href="style.css" rel="stylesheet" />
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script src="https://kit.fontawesome.com/c10f8b8864.js" crossorigin="anonymous"></script>
 
 	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 </head>
 
 <body>
 	<section class="header">
-		<div class="container">
-			<div class="top-line">
+		<div class="top-line">
+			<div class="container">
 				<span id="logo">TV-SHOW-PROJECT</span>
 				<nav>
 					<ul class="main-menu">
@@ -26,6 +26,91 @@
 					</ul>
 				</nav>
 			</div>
+		</div>
+		<div class="slider-wrap">
+			<div class="slider">
+				<div class="slider-item first-slide current-slide">
+					<div class="container">
+						<div class="slide-inner">
+							<div class="slide-content">
+								<h1>Name1</h1>
+								<div class="about-show-on-slide">
+									1111 | Genre, Genre
+								</div>
+								<button class="button">Watch now</button>
+							</div>
+							<div class="tiles">
+								<div class="slide-toggle first-slide-toggle"></div>
+								<div class="slide-toggle second-slide-toggle"></div>
+								<div class="slide-toggle third-slide-toggle"></div>
+								<div class="slide-toggle fourth-slide-toggle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slider-item second-slide">
+					<div class="container">
+						<div class="slide-inner">
+							<div class="slide-content">
+								<h1>Name2</h1>
+								<div class="about-show-on-slide">
+									1111 | Genre, Genre
+								</div>
+								<button class="button">Watch now</button>
+							</div>
+							<div class="tiles">
+								<div class="slide-toggle first-slide-toggle"></div>
+								<div class="slide-toggle second-slide-toggle"></div>
+								<div class="slide-toggle third-slide-toggle"></div>
+								<div class="slide-toggle fourth-slide-toggle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slider-item third-slide">
+					<div class="container">
+						<div class="slide-inner">
+							<div class="slide-content">
+								<h1>Name3</h1>
+								<div class="about-show-on-slide">
+									1111 | Genre, Genre
+								</div>
+								<button class="button">Watch now</button>
+							</div>
+							<div class="tiles">
+								<div class="slide-toggle first-slide-toggle"></div>
+								<div class="slide-toggle second-slide-toggle"></div>
+								<div class="slide-toggle third-slide-toggle"></div>
+								<div class="slide-toggle fourth-slide-toggle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slider-item fourth-slide">
+					<div class="container">
+						<div class="slide-inner">
+							<div class="slide-content">
+								<h1>Name4</h1>
+								<div class="about-show-on-slide">
+									1111 | Genre, Genre
+								</div>
+								<button class="button">Watch now</button>
+							</div>
+							<div class="tiles">
+								<div class="slide-toggle first-slide-toggle"></div>
+								<div class="slide-toggle second-slide-toggle"></div>
+								<div class="slide-toggle third-slide-toggle"></div>
+								<div class="slide-toggle fourth-slide-toggle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="prev-btn"></div>
+			<div class="next-btn"></div> -->
+
+		</div>
+		<div class="container">
 			<div class="show-info">
 				<div class="show-poster-box"><img src="" alt="" id='showPoster'></div>
 				<div class="show-info-content">
@@ -35,8 +120,10 @@
 						<p id="showSummary"></p>
 					</div>
 					<div>
-						<form><button class="button" type="submit" formaction=#filter>Go to
-								episodes<i class="fa fa-arrow-down" aria-hidden="true"></i></button></form>
+						<button class="button">
+							Go to episodes
+							<i class="fa fa-arrow-down" aria-hidden="true"></i>
+						</button>
 					</div>
 
 				</div>
@@ -48,7 +135,7 @@
 	<section class="similar-shows">
 		<div class="container">
 			<div class="similar-shows-top-line">
-				<h2>You also may like</h2>
+				<h2>Popular TV-Shows</h2>
 				<div class="show-selector-wrapper">
 					<select id="showSelector">
 						<option selected disabled value="chooseAShow">Choose another TV-show</option>
@@ -97,21 +184,24 @@
 						<div class="radio-box">
 							<div class="radio-item">
 								<label>
-									<input type="radio" name="searchArea" value="title" id="inTitles" class="real-radio-btn" checked>
+									<input type="radio" name="searchArea" value="title" id="inTitles"
+										class="real-radio-btn" checked>
 									<span class="custom-radio-btn"></span>
 									In titles
 								</label>
 							</div>
 							<div class="radio-item">
 								<label>
-									<input type="radio" name="searchArea" value="title-text" id="inTitlesAndText" class="real-radio-btn">
+									<input type="radio" name="searchArea" value="title-text" id="inTitlesAndText"
+										class="real-radio-btn">
 									<span class="custom-radio-btn"></span>
 									Title + text
 								</label>
 							</div>
 						</div>
 						<div class="input-wrap">
-							<input type="text" name="" class="search-input" id="showSearchInput" placeholder="Enter a keyword to search">
+							<input type="text" name="" class="search-input" id="showSearchInput"
+								placeholder="Enter a keyword to search">
 							<span id="clearInputBackspace"></span>
 						</div>
 					</div>
@@ -137,6 +227,8 @@
 
 	<!-- Loads YOUR javascript code -->
 	<script src="script.js"></script>
+	<script src="slider.js"></script>
+
 </body>
 
 </html>

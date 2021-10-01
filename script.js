@@ -53,20 +53,11 @@ function makeHomePage() {
 
 	buildShowSelector(allShows);
 
-	// let uniqueRandomNumberArray = [];
 	let uniqueNumbersArray = [];
-
-	// // Filling array for similar shows
-	// for (let i = 0; i < allShows.length; i++) {
-	// 	uniqueRandomNumberArray.push(i);
-	// }
 
 	for (let i = 0; i < allShows.length; i++) {
 		uniqueNumbersArray.push(i);
 	}
-
-	// // Shuffle
-	// shuffle(uniqueRandomNumberArray);
 
 	let showsWithAPoster = allShows.filter((show) => {
 		if (!(show.image == null)) {
@@ -84,11 +75,14 @@ function makeHomePage() {
 	showSelector.addEventListener('change', () => {
 		currentShowId = showSelector.value;
 		makePageForSelectedShow(currentShowId, allShows);
-		getAllEpisodes(currentShowId);
 	});
 
 	returnButton.addEventListener('click', () => {
+		content.style.display = 'block';
+		content.scrollIntoView(true);
 		document.querySelector('.show-info').style.display = 'none';
+		
+
 		let popularShowsHeader = document.querySelector(
 			'.similar-shows-top-line > h2'
 		);
@@ -96,7 +90,9 @@ function makeHomePage() {
 		showSelector.value = 'chooseAShow';
 		filter.style.display = 'none';
 		root.textContent = '';
-		content.style.display = 'block';
+		document.querySelector('.slider-wrap').style.display = 'block';
+
+		
 	});
 
 	function makeEpisodeFilter() {
@@ -318,6 +314,12 @@ function renderCurrentShow(show, currentShowBackgroundUrl) {
 
 	let showSummary = document.querySelector('#showSummary');
 	showSummary.innerHTML = show.summary;
+
+	// Button action
+	let btn = document.querySelector('.show-info-content').querySelector('button');
+	btn.addEventListener('click', () => {
+		filter.scrollIntoView(true);
+	})
 }
 
 function makePageForEpisodes(episodeList) {
@@ -711,7 +713,7 @@ function renderShows(showList, allShowsList) {
 
 		whatchButton.addEventListener('click', () => {
 			makePageForSelectedShow(showList[i].id, allShowsList);
-			getAllEpisodes(showList[i].id);
+			// getAllEpisodes(showList[i].id);
 		});
 
 		// Making hover effect
@@ -722,32 +724,14 @@ function renderShows(showList, allShowsList) {
 		});
 		show.addEventListener('mouseleave', () => {
 			whatchButton.style.display = 'none';
-			show.style.boxShadow = 'none';
 			show.style.background = 'none';
 		});
 	}
 }
 
 function makePageForSelectedShow(showId, allShows) {
-	window.scrollTo({
-		top: 0,
-		behavior: 'instant',
-	});
-
-	document.querySelector('.show-info').style.display = 'flex';
-
-	document.getElementById('root').innerHTML = '';
-
-	filter.style.display = 'block';
-	document.querySelector('.selector-box').style.display = 'block';
-	document.querySelector('#orResult').style.display = 'block';
-	document.querySelector('.search-box').style.display = 'block';
-	document.querySelector('.episode-selector button').style.display =
-		'inline-block';
-
+	
 	showSelector.value = showId;
-
-	content.style.display = 'none';
 
 	//Geting current show for finding bg
 
@@ -770,11 +754,12 @@ function makePageForSelectedShow(showId, allShows) {
 		currentShowBackgroundUrl = defaultBackground;
 	}
 
-	let promiseFunction = function (url) {
+	let promiseFunction = function (currentShowBackgroundUrl) {
 		return new Promise((resolve, reject) => {
 			let img = new Image();
 			img.src = currentShowBackgroundUrl;
-
+			let imgPoster = new Image();
+			imgPoster.src = currentShow.image.original;
 			img.onload = () => {
 				resolve();
 			};
@@ -786,8 +771,26 @@ function makePageForSelectedShow(showId, allShows) {
 
 	promiseFunction(currentShowBackgroundUrl).then(
 		() => {
+			window.scrollTo({
+				top: 0,
+				behavior: 'instant',
+			});
+			document.querySelector('.slider-wrap').style.display = 'none';
+			document.querySelector('.show-info').style.display = 'flex';
+
+			document.getElementById('root').innerHTML = '';
+
+			filter.style.display = 'block';
+			document.querySelector('.selector-box').style.display = 'block';
+			document.querySelector('#orResult').style.display = 'block';
+			document.querySelector('.search-box').style.display = 'block';
+			document.querySelector('.episode-selector button').style.display =
+				'inline-block';
+			content.style.display = 'none';
+
 			renderCurrentShow(currentShow, currentShowBackgroundUrl);
 			makeSimilarShowList(currentShow, allShows, currentShowBackgroundUrl);
+			getAllEpisodes(showId);
 		},
 		(error) => {
 			console.log(error);

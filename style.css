@@ -19,11 +19,12 @@ body {
 	font-family: 'Urbanist', sans-serif;
 	font-weight: bold;
 	font-size: 34px;
-	margin-top: 20px;
 }
 
 h1 {
 	font-family: 'Urbanist', sans-serif;
+	color:white;
+	font-size: 70px;
 }
 
 h2 {
@@ -92,11 +93,108 @@ input:focus-visible {
 }
 
 .top-line {
+	background-color: #03060f;
+}
+.top-line .container {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+	height: 90px;
 }
+
+/* ------------------------------------ Slider ----------------------------------- */
+
+.slider-wrap {
+	height: 1000px;
+	width: 100%;
+	background-color: #edf2f7;
+	position: relative;
+}
+
+.slider {
+	overflow-x: scroll;
+	display: flex;
+	height: 100%;
+}
+
+.slider .container {
+	height: 100%;
+	display: flex;
+
+	align-items: center;
+}
+
+.slider-item {
+	min-width: 100%;
+	min-height: 200px;
+	display: none;
+}
+
+.slider h1 {
+	padding-left: 6px;
+}
+
+.about-show-on-slide {
+	color: white;
+	margin-bottom: 40px;
+	padding-left: 6px;
+}
+
+.current-slide {
+	display: block;
+	color: #03060f;
+}
+
+.prev-btn {
+	width: 20px;
+	height: 20px;
+	background-color: blue;
+	position: absolute;
+	top: 50%;
+	left: 0;
+}
+
+.next-btn {
+	width: 20px;
+	height: 20px;
+	background-color: blue;
+	position: absolute;
+	top: 50%;
+	right: 0;
+}
+
+.slide-inner {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	height: 80%;
+}
+
+.slide-content {
+	min-width: 50%;
+}
+
+.tiles {
+	display: flex;
+	flex-wrap: wrap;
+	align-self: flex-end;
+	justify-content: end;
+}
+
+.slide-toggle {
+	width: 150px;
+	height: 100px;
+	margin: 10px;
+	cursor: pointer;
+	transition: .3s all;
+}
+
+.slide-toggle:hover {
+	transform: translateY(-5px);
+}
+/* ------------------------------------ Slider ----------------------------------- */
 
 .main-menu {
 	display: flex;
@@ -113,7 +211,7 @@ input:focus-visible {
 }
 
 .show-info {
-	display: flex;
+	display: none;
 	padding: 100px 0;
 }
 
@@ -265,6 +363,7 @@ input:focus-visible {
 }
 
 #filter {
+	display: none;
 	padding: 100px 0;
 }
 
@@ -373,8 +472,6 @@ input:focus-visible {
 	display: none;
 	cursor: pointer;
 }
-
-
 
 .search-input {
 	font-size: 16px;
