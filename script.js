@@ -81,7 +81,6 @@ function makeHomePage() {
 		content.style.display = 'block';
 		content.scrollIntoView(true);
 		document.querySelector('.show-info').style.display = 'none';
-		
 
 		let popularShowsHeader = document.querySelector(
 			'.similar-shows-top-line > h2'
@@ -89,10 +88,9 @@ function makeHomePage() {
 		popularShowsHeader.textContent = 'Popular TV-Shows';
 		showSelector.value = 'chooseAShow';
 		filter.style.display = 'none';
+		root.style.display = 'none';
 		root.textContent = '';
 		document.querySelector('.slider-wrap').style.display = 'block';
-
-		
 	});
 
 	function makeEpisodeFilter() {
@@ -272,7 +270,6 @@ function showSearch() {
 	}
 	document.querySelector('.content-inner').textContent = '';
 
-
 	// Checking if final search result has any shows in it
 	if (searchResultArray.length > 0) {
 		// If yes - render those shows
@@ -281,12 +278,13 @@ function showSearch() {
 		// If no - show a message
 		let container = document.querySelector('.content-inner');
 		let sorry = document.createElement('span');
-		sorry.style.padding = '100px'
+		sorry.style.padding = '100px';
 		sorry.style.fontSize = '28px';
 		sorry.style.color = 'white';
 		sorry.style.fontWeight = 'bold';
 		container.append(sorry);
-		sorry.textContent = 'Sorry, we couldn\'t find anything. Try to change your request';
+		sorry.textContent =
+			"Sorry, we couldn't find anything. Try to change your request";
 	}
 }
 
@@ -316,14 +314,17 @@ function renderCurrentShow(show, currentShowBackgroundUrl) {
 	showSummary.innerHTML = show.summary;
 
 	// Button action
-	let btn = document.querySelector('.show-info-content').querySelector('button');
+	let btn = document
+		.querySelector('.show-info-content')
+		.querySelector('button');
 	btn.addEventListener('click', () => {
 		filter.scrollIntoView(true);
-	})
+	});
 }
 
 function makePageForEpisodes(episodeList) {
 	const rootElem = document.getElementById('root');
+	rootElem.style.display = 'flex';
 	rootElem.innerHTML = '';
 
 	let searchResult = document.querySelector('#searchResult');
@@ -730,7 +731,6 @@ function renderShows(showList, allShowsList) {
 }
 
 function makePageForSelectedShow(showId, allShows) {
-	
 	showSelector.value = showId;
 
 	//Geting current show for finding bg
@@ -781,7 +781,7 @@ function makePageForSelectedShow(showId, allShows) {
 			document.getElementById('root').innerHTML = '';
 
 			filter.style.display = 'block';
-			document.querySelector('.selector-box').style.display = 'block';
+			// document.querySelector('.selector-box').style.display = 'block';
 			document.querySelector('#orResult').style.display = 'block';
 			document.querySelector('.search-box').style.display = 'block';
 			document.querySelector('.episode-selector button').style.display =
