@@ -264,8 +264,8 @@ input:focus-visible {
 
 .genre-tag {
 	color: var(--main-accent);
-	text-decoration: none;
 	margin-right: 10px;
+	cursor: pointer;
 }
 .show-poster-box {
 	flex-shrink: 0;
@@ -445,7 +445,7 @@ input:focus-visible {
 	justify-content: flex-startf;
 }
 
-.filter-search-box h2 {
+.main-filter h2 {
 	font-family: Urbanist;
 	color: white;
 	margin-bottom: 20px;
@@ -507,10 +507,9 @@ input:focus-visible {
 }
 
 .main-filter {
-
 	width: 350px;
 	min-width: 280px;
-	height: 1000px;
+	height: 1150px;
 	padding: 30px;
 	padding-top: 20px;
 	margin-right: 35px;
@@ -521,6 +520,10 @@ input:focus-visible {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+.main-filter button {
+	width: 100%;
 }
 
 .filter-search-box {
@@ -559,13 +562,8 @@ input:focus-visible {
 }
 
 .filter-desc {
-	display: none;
 	width: 100%;
-	padding-bottom: 20px;
 	color: white;
-	font-size: 20px;
-	font-family: 'Urbanist', sans-serif;
-	font-weight: 300;
 }
 
 .filter-desc span {
@@ -577,6 +575,7 @@ input:focus-visible {
 .alphabet-box {
 	/* padding: 0 10px; */
 	margin: 0 -5px;
+	margin-bottom: 30px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -605,11 +604,37 @@ input:focus-visible {
 	color: #20547a;
 }
 
+.genres-box {
+	width: 100%;
+	margin-bottom: 50px;
+}
+
+.genres-inner {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.genre-filter {
+	color: #5cb9fe;
+	margin: 5px 0;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
 .sorry {
 	padding: 100px;
 	font-size: 28px;
 	color: white;
 	font-weight: bold;
+}
+
+.show-search-result {
+	text-align: right;
+	display: none;
+	font-size: 18px;
+	color: white;
+	margin: 40px 0;
 }
 
 .content-inner {

@@ -1,6 +1,6 @@
 let section = '';
 let searchString = '';
-let currentGenre = '';
+let currentGenre = [];
 let allShows = getAllShows();
 let arr_EN = [
 	'0-9',
@@ -136,7 +136,6 @@ function makeHomePage() {
 
 	function buildShowFilter() {
 		let alphabetBox = document.querySelector('.alphabet-box');
-		let filteredShows;
 
 		// Creating alphabet filter
 		for (let i = 0; i < arr_EN.length; i++) {
@@ -178,7 +177,7 @@ function makeHomePage() {
 				if (section == arr_EN[i]) {
 					section = '';
 					item.style.backgroundColor = '#0c142b';
-					item.querySelector('.alphabet-letter').style.color = '#449ee0';
+					item.querySelector('.alphabet-letter').style.color = '#5cb9ff';
 				} else {
 					section = arr_EN[i];
 
@@ -196,6 +195,64 @@ function makeHomePage() {
 				showSearch();
 			});
 		}
+
+		// Dinamic update number of shows on each letter
+		
+
+		// Create Genres filter
+		function buildGenresFilter() {
+			// Create array with all genres
+			let allGenresArr = [];
+			allShows.forEach((show) => {
+				show.genres.forEach((genre) => {
+					allGenresArr.push(genre);
+				});
+			});
+			// Delete duplicates
+			let allUniqueGenres = new Set(allGenresArr);
+			allGenresArr = Array.from(allUniqueGenres);
+			allGenresArr.sort();
+
+			let genresInner = document.querySelector('.genres-inner');
+			allGenresArr.forEach((genre) => {
+				let span = document.createElement('span');
+				span.className = 'genre-filter';
+				span.textContent = genre;
+				genresInner.append(span);
+
+				span.addEventListener('click', () => {
+					if (!currentGenre.includes(span.textContent)) {
+						currentGenre.push(span.textContent);
+						span.style.color = 'var(--main-accent)';
+					} else {
+						span.style.color = '#5cb9fe';
+						currentGenre = currentGenre.filter((genre) => {
+							if (!(genre == span.textContent)) {
+								return true;
+							}
+						});
+					}
+					showSearch();
+				});
+			});
+		}
+		buildGenresFilter();
+
+		// Set up clear filter btn
+		clearFilterBtn.addEventListener('click', () => {
+			section = '';
+			searchString = '';
+			showSearchInput.value = '';
+			document.querySelectorAll('.alphabet-item').forEach(item => {
+				item.style.background = '#0c142b';
+				item.querySelector('.alphabet-letter').style.color = '#5cb9ff';
+			})
+			currentGenre = [];
+			document.querySelectorAll('.genre-filter').forEach(genre => {
+				genre.style.color = '#5cb9fe';
+			});
+			showSearch();
+		})
 	}
 
 	renderShows(allShowsForRender, allShows);
@@ -228,13 +285,6 @@ function makeHomePage() {
 			return;
 		} else showSearch();
 	});
-
-	// Fixing filter's sticky
-	if (
-		window.innerHeight < document.querySelector('.main-filter').clientHeight
-	) {
-		// document.querySelector('.main-filter').style.position = 'unset';
-	}
 }
 
 function showSearch() {
@@ -275,7 +325,25 @@ function showSearch() {
 			}
 		});
 	}
-	document.querySelector('.content-inner').textContent = '';
+
+	// Filter by genre
+	for (let i = 0; i < currentGenre.length; i++) {
+		searchResultArray = searchResultArray.filter((show) => {
+			// Условие для фильтра
+			if (show.genres.includes(currentGenre[i])) {
+				return true;
+			}
+		});
+	}
+		
+	let contentInner = document.querySelector('.content-inner');
+	contentInner.textContent = '';
+
+	// let showSearchResult = document.createElement('div');
+	// showSearchResult.className = 'show-search-result';
+	// showSearchResult.style.display = 'block';
+	// showSearchResult.textContent = `Found ${searchResultArray.length} tv-shows:`;
+	// contentInner.append(showSearchResult)
 
 	// Checking if final search result has any shows in it
 	if (searchResultArray.length > 0) {
@@ -283,10 +351,9 @@ function showSearch() {
 		renderShows(searchResultArray, allShows);
 	} else {
 		// If no - show a message
-		let container = document.querySelector('.content-inner');
 		let sorry = document.createElement('span');
-		sorry.classList.add('sorry')
-		container.append(sorry);
+		sorry.classList.add('sorry');
+		contentInner.append(sorry);
 		sorry.textContent =
 			"Sorry, we couldn't find anything. Try to change your request";
 	}
@@ -307,11 +374,23 @@ function renderCurrentShow(show, currentShowBackgroundUrl) {
 	let genres = document.querySelector('.genres');
 	genres.textContent = '';
 	for (let i = 0; i < show.genres.length; i++) {
-		let genre = document.createElement('a');
+		let genre = document.createElement('span');
 		genre.textContent = show.genres[i];
-		genre.href = '#';
 		genre.className = 'genre-tag';
 		genres.append(genre);
+		genre.addEventListener('click', () => {
+			currentGenre.push(show.genres[i]);
+			filter.style.display = 'none';
+			root.style.display = 'none';
+			content.style.display = 'block';
+			content.scrollIntoView(true);
+			document.querySelectorAll('.genre-filter').forEach((genreSpan) => {
+				if (genreSpan.textContent == show.genres[i]) {
+					genreSpan.style.color = 'var(--main-accent)';
+				}
+			});
+			showSearch();
+		});
 	}
 
 	let showSummary = document.querySelector('#showSummary');
@@ -662,7 +741,6 @@ function renderShows(showList, allShowsList) {
 		img.addEventListener('click', () => {
 			makePageForSelectedShow(showList[i].id, allShowsList);
 		});
-
 
 		if (!(showList[i].image == undefined)) {
 			img.src = showList[i].image.medium;
