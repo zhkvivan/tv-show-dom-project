@@ -228,6 +228,13 @@ function makeHomePage() {
 			return;
 		} else showSearch();
 	});
+
+	// Fixing filter's sticky
+	if (
+		window.innerHeight < document.querySelector('.main-filter').clientHeight
+	) {
+		// document.querySelector('.main-filter').style.position = 'unset';
+	}
 }
 
 function showSearch() {
@@ -278,10 +285,7 @@ function showSearch() {
 		// If no - show a message
 		let container = document.querySelector('.content-inner');
 		let sorry = document.createElement('span');
-		sorry.style.padding = '100px';
-		sorry.style.fontSize = '28px';
-		sorry.style.color = 'white';
-		sorry.style.fontWeight = 'bold';
+		sorry.classList.add('sorry')
 		container.append(sorry);
 		sorry.textContent =
 			"Sorry, we couldn't find anything. Try to change your request";
@@ -655,6 +659,10 @@ function renderShows(showList, allShowsList) {
 
 		let img = document.createElement('img');
 		img.className = 'show-poster';
+		img.addEventListener('click', () => {
+			makePageForSelectedShow(showList[i].id, allShowsList);
+		});
+
 
 		if (!(showList[i].image == undefined)) {
 			img.src = showList[i].image.medium;
@@ -676,6 +684,9 @@ function renderShows(showList, allShowsList) {
 		showName.className = 'show-name';
 		showName.textContent = showList[i].name;
 		showInfoInner.append(showName);
+		showName.addEventListener('click', () => {
+			makePageForSelectedShow(showList[i].id, allShowsList);
+		});
 
 		let genres = document.createElement('div');
 		showInfoInner.append(genres);
@@ -714,7 +725,6 @@ function renderShows(showList, allShowsList) {
 
 		whatchButton.addEventListener('click', () => {
 			makePageForSelectedShow(showList[i].id, allShowsList);
-			// getAllEpisodes(showList[i].id);
 		});
 
 		// Making hover effect

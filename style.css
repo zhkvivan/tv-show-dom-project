@@ -427,6 +427,7 @@ input:focus-visible {
 .similar-show-name {
 	font-weight: bold;
 	font-size: 15px;
+	max-width: 160px;
 }
 
 #filter {
@@ -452,6 +453,7 @@ input:focus-visible {
 
 .radio-box {
 	display: flex;
+	flex-wrap: wrap;
 	color: rgb(211, 211, 211);
 }
 
@@ -505,7 +507,9 @@ input:focus-visible {
 }
 
 .main-filter {
+
 	width: 350px;
+	min-width: 280px;
 	height: 1000px;
 	padding: 30px;
 	padding-top: 20px;
@@ -601,6 +605,13 @@ input:focus-visible {
 	color: #20547a;
 }
 
+.sorry {
+	padding: 100px;
+	font-size: 28px;
+	color: white;
+	font-weight: bold;
+}
+
 .content-inner {
 	max-width: 1060px;
 	margin-top: -30px;
@@ -618,6 +629,7 @@ input:focus-visible {
 	width: 220px;
 	height: 300px;
 	margin-right: 60px;
+	cursor: pointer;
 }
 
 .show-poster {
@@ -630,6 +642,7 @@ input:focus-visible {
 .content-item .show-name {
 	margin: 20px 0;
 	color: white;
+	cursor: pointer;
 }
 
 .show-summary {
