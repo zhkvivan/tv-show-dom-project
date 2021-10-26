@@ -34,7 +34,10 @@ let arr_EN = [
 let allShowsForRender = prepareShowListArr(allShows);
 
 function makeHomePage() {
-	let showInfo = document.querySelector('.show-info');
+	// set logo 
+
+	logo.addEventListener('click', () => {console.log('logo')})
+	let showInfo = document.querySelector('.show-info-wrap');
 	showInfo.style.display = 'none';
 
 	let header = document.querySelector('.header');
@@ -80,7 +83,7 @@ function makeHomePage() {
 	returnButton.addEventListener('click', () => {
 		content.style.display = 'block';
 		content.scrollIntoView(true);
-		document.querySelector('.show-info').style.display = 'none';
+		document.querySelector('.show-info-wrap').style.display = 'none';
 
 		let popularShowsHeader = document.querySelector(
 			'.similar-shows-top-line > h2'
@@ -191,12 +194,10 @@ function makeHomePage() {
 					item.style.backgroundColor = '#17e69d';
 					item.querySelector('.alphabet-letter').style.color = '#061e30';
 				}
-
 				showSearch();
 			});
 		}
 
-		// Dinamic update number of shows on each letter
 		
 
 		// Create Genres filter
@@ -268,6 +269,21 @@ function makeHomePage() {
 	}
 
 	showSearchInput.addEventListener('input', updateSearchString);
+	mainTopSearch.addEventListener('input', (e) => {
+		document.querySelector('.slider-wrap').style.display = 'none';
+		document.querySelector('.similar-shows').style.display = 'none';
+		document.querySelector('.header').style.minHeight = 'unset';
+		document.querySelector('.show-info-wrap').style.display = 'none';
+		document.querySelector('#filter').style.display = 'none';
+		document.querySelector('#root').style.display = 'none';
+
+		document.querySelector('#content').style.display = 'block';
+
+
+
+		showSearchInput.value = e.target.value;
+		updateSearchString(e);
+	});
 
 	clearInputBackspace.addEventListener('click', () => {
 		searchString = '';
@@ -286,6 +302,8 @@ function makeHomePage() {
 		} else showSearch();
 	});
 }
+
+
 
 function showSearch() {
 	let searchResultArray = [];
@@ -335,15 +353,9 @@ function showSearch() {
 			}
 		});
 	}
-		
+
 	let contentInner = document.querySelector('.content-inner');
 	contentInner.textContent = '';
-
-	// let showSearchResult = document.createElement('div');
-	// showSearchResult.className = 'show-search-result';
-	// showSearchResult.style.display = 'block';
-	// showSearchResult.textContent = `Found ${searchResultArray.length} tv-shows:`;
-	// contentInner.append(showSearchResult)
 
 	// Checking if final search result has any shows in it
 	if (searchResultArray.length > 0) {
@@ -357,9 +369,44 @@ function showSearch() {
 		sorry.textContent =
 			"Sorry, we couldn't find anything. Try to change your request";
 	}
+
+	// Dynamic update number of shows on each letter
+	document.querySelectorAll('.alphabet-item').forEach((item) => {
+		let numberOfShowsOnCurrentLetter = searchResultArray.filter(show => {
+			let nameArr = Array.from(show.name);
+			if (item.querySelector('.alphabet-letter').textContent == '0-9') {
+				let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+				if (
+					arr.some((number) => {
+						if (number == nameArr[0]) {
+							return true;
+						}
+					})
+				) {
+					return true;
+				}
+			} else {
+				if (nameArr[0] == item.querySelector('.alphabet-letter').textContent) {
+					return show;
+				}
+			}
+		})
+		
+
+		item.querySelector('.alphabet-number').textContent =
+			numberOfShowsOnCurrentLetter.length;
+	});
 }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
+
+	// Clean searhs input
+	mainTopSearch.value = '';
+	showSearchInput.value = '';
+
+	// Showing similar shows again after searching 
+	document.querySelector('.similar-shows').style.display = 'block';
+
 	// Render currernt show details in the header
 	let header = document.querySelector('.header');
 
@@ -371,6 +418,7 @@ function renderCurrentShow(show, currentShowBackgroundUrl) {
 	let showName = document.querySelector('#showName');
 	showName.textContent = show.name;
 
+	// Render genres of the current show
 	let genres = document.querySelector('.genres');
 	genres.textContent = '';
 	for (let i = 0; i < show.genres.length; i++) {
@@ -758,16 +806,21 @@ function renderShows(showList, allShowsList) {
 		showInfoInner.className = 'show-info-inner';
 		showInfo.append(showInfoInner);
 
+		let showNameWrap = document.createElement('div');
+		showNameWrap.className = 'show-name-wrap';
+		showInfoInner.append(showNameWrap);
+
+
 		let showName = document.createElement('h2');
 		showName.className = 'show-name';
 		showName.textContent = showList[i].name;
-		showInfoInner.append(showName);
+		showNameWrap.append(showName);
 		showName.addEventListener('click', () => {
 			makePageForSelectedShow(showList[i].id, allShowsList);
 		});
 
 		let genres = document.createElement('div');
-		showInfoInner.append(genres);
+		showNameWrap.append(genres);
 		genres.textContent = '';
 		for (let j = 0; j < showList[i].genres.length; j++) {
 			let genre = document.createElement('span');
@@ -775,6 +828,29 @@ function renderShows(showList, allShowsList) {
 			genre.className = 'genre-tag';
 			genres.append(genre);
 		}
+
+		let statusRatingRuntime = document.createElement('div');
+		statusRatingRuntime.className = 'status-rating-runtime';
+		showInfoInner.append(statusRatingRuntime);
+
+		let status = document.createElement('span');
+		status.className = 'show-status';
+		status.textContent = 'Status: ' + showList[i].status;
+		statusRatingRuntime.append(status)
+
+		let rating = document.createElement('span');
+		rating.className = 'show-rating';
+		rating.textContent = 'Rating: ' + showList[i].rating.average;
+		statusRatingRuntime.append(rating);
+
+		if (!(showList[i].runtime == null)) {
+			let runtime = document.createElement('span');
+		runtime.className = 'show-runtime';
+		runtime.textContent = 'Runtime: ' + showList[i].runtime + ' min';
+		statusRatingRuntime.append(runtime);
+		}
+		
+
 
 		let showSummary = document.createElement('div');
 		showSummary.className = 'show-summary';
@@ -864,7 +940,7 @@ function makePageForSelectedShow(showId, allShows) {
 				behavior: 'instant',
 			});
 			document.querySelector('.slider-wrap').style.display = 'none';
-			document.querySelector('.show-info').style.display = 'flex';
+			document.querySelector('.show-info-wrap').style.display = 'block';
 
 			document.getElementById('root').innerHTML = '';
 
@@ -885,6 +961,7 @@ function makePageForSelectedShow(showId, allShows) {
 		}
 	);
 }
+
 
 const backgroundImages = [
 	{

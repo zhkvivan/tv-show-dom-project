@@ -17,13 +17,16 @@
 	<section class="header">
 		<div class="top-line">
 			<div class="container">
-				<span id="logo">TV-SHOW-PROJECT</span>
+				<div>
+					<img src="logo.png" alt="" id="logo">
+				</div>
 				<nav>
 					<ul class="main-menu">
 						<li class="menu-item"><a href="#" class="menu-link">About</a></li>
 						<li class="menu-item"><a href="#" class="menu-link">TV-Shows</a></li>
 						<li class="menu-item"><a href="#" class="menu-link">Contacts</a></li>
 					</ul>
+					<input type="text" class="showSearch" id="mainTopSearch" placeholder="Search TV-Show here">
 				</nav>
 			</div>
 		</div>
@@ -111,21 +114,24 @@
 
 		</div>
 		<div class="container">
-			<div class="show-info">
-				<div class="show-poster-box"><img src="" alt="" id='showPoster'></div>
-				<div class="show-info-content">
-					<div>
-						<h1 id="showName"></h1>
-						<div class="genres"></div>
-						<p id="showSummary"></p>
+			
+			<div class="show-info-wrap">
+				<div class="show-info">
+					<div class="show-poster-box"><img src="" alt="" id='showPoster'></div>
+					<div class="show-info-content">
+						<div>
+							<h1 id="showName"></h1>
+							<div class="genres"></div>
+							<p id="showSummary"></p>
+						</div>
+						<div>
+							<button class="button">
+								Go to episodes
+								<i class="fa fa-arrow-down" aria-hidden="true"></i>
+							</button>
+						</div>
+	
 					</div>
-					<div>
-						<button class="button">
-							Go to episodes
-							<i class="fa fa-arrow-down" aria-hidden="true"></i>
-						</button>
-					</div>
-
 				</div>
 
 			</div>
@@ -143,7 +149,7 @@
 						</select>
 					</div>
 					<div class="show-selector-desc">or</div>
-					<button class="button" id="returnButton">Return to all shows</button>
+					<button class="button return-button" id="returnButton">Return to all shows</button>
 				</div>
 			</div>
 			<div class="similar-shows-wrapper">
@@ -179,6 +185,7 @@
 
 	<section id='content'>
 		<div class="container">
+			<div class="sort-wrap"></div>
 			<div class="content-wrapper">
 				<div class="main-filter" data-sticky="true">
 					<div class="filter-search-box">
