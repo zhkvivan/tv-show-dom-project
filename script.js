@@ -1,5 +1,5 @@
-let section = '';
-let searchString = '';
+let section = ''; //Character for searching
+let searchString = ''; // Search input's value stores here
 let currentGenre = [];
 let allShows = getAllShows();
 let arr_EN = [
@@ -34,9 +34,17 @@ let arr_EN = [
 let allShowsForRender = prepareShowListArr(allShows);
 
 function makeHomePage() {
-	// set logo 
+	// Setting logo. When click on logo, it's 'refreshing' the page
+	logo.addEventListener('click', () => {
+		document.querySelector('.show-info-wrap').style.display = 'none';
+		filter.style.display = 'none';
+		root.style.display = 'none';
+		document.querySelector('.slider-wrap').style.display = 'block'
+		content.style.display = 'block';
+	})
 
-	logo.addEventListener('click', () => {console.log('logo')})
+	
+
 	let showInfo = document.querySelector('.show-info-wrap');
 	showInfo.style.display = 'none';
 
@@ -202,30 +210,38 @@ function makeHomePage() {
 
 		// Create Genres filter
 		function buildGenresFilter() {
-			// Create array with all genres
+
+			// Getting all the genres from all tv shows and creating array with all genres
 			let allGenresArr = [];
 			allShows.forEach((show) => {
 				show.genres.forEach((genre) => {
 					allGenresArr.push(genre);
 				});
 			});
-			// Delete duplicates
+
+			// Delete duplicates from the genres array
 			let allUniqueGenres = new Set(allGenresArr);
 			allGenresArr = Array.from(allUniqueGenres);
 			allGenresArr.sort();
 
-			let genresInner = document.querySelector('.genres-inner');
+			// Rendering each genre on the filter section:
+			let genresInner = document.querySelector('.genres-inner'); // Getting parent container
 			allGenresArr.forEach((genre) => {
+				// Creating a separate span for each genre:
 				let span = document.createElement('span');
 				span.className = 'genre-filter';
+				// populate each span with each genre:
 				span.textContent = genre;
 				genresInner.append(span);
-
+				// Adding event listener for each span. It makes the clicked span colored/uncolored.
 				span.addEventListener('click', () => {
+					// Checking if array with genres for filtering doesn't contain the genre we've clicked on
 					if (!currentGenre.includes(span.textContent)) {
+						// If it doesn't, we need to add clicked genre to the array and make it accent color
 						currentGenre.push(span.textContent);
 						span.style.color = 'var(--main-accent)';
 					} else {
+						// It it already contains the clicked genre, we just make it default color and do filtering and filter that genre out.
 						span.style.color = '#5cb9fe';
 						currentGenre = currentGenre.filter((genre) => {
 							if (!(genre == span.textContent)) {
@@ -233,6 +249,7 @@ function makeHomePage() {
 							}
 						});
 					}
+					// then when currentGenre array is ready, we call showSearch function that uses currentGenre array.
 					showSearch();
 				});
 			});
@@ -241,9 +258,9 @@ function makeHomePage() {
 
 		// Set up clear filter btn
 		clearFilterBtn.addEventListener('click', () => {
-			section = '';
-			searchString = '';
-			showSearchInput.value = '';
+			section = ''; // reset char
+			searchString = ''; // reset var for search string
+			showSearchInput.value = ''; // reset search input itself
 			document.querySelectorAll('.alphabet-item').forEach(item => {
 				item.style.background = '#0c142b';
 				item.querySelector('.alphabet-letter').style.color = '#5cb9ff';
@@ -347,7 +364,7 @@ function showSearch() {
 	// Filter by genre
 	for (let i = 0; i < currentGenre.length; i++) {
 		searchResultArray = searchResultArray.filter((show) => {
-			// Условие для фильтра
+			// Condition for filtering
 			if (show.genres.includes(currentGenre[i])) {
 				return true;
 			}
@@ -399,22 +416,28 @@ function showSearch() {
 }
 
 function renderCurrentShow(show, currentShowBackgroundUrl) {
-
 	// Clean searhs input
 	mainTopSearch.value = '';
 	showSearchInput.value = '';
 
-	// Showing similar shows again after searching 
+	// Clearing the array with the selected genres for search and making all of the genres in filter section defaut colored:
+	currentGenre = [];
+	document.querySelectorAll('.genre-filter').forEach(genre => {
+		genre.style.color = '#5cb9fe';
+	})
+
+	// Showing similar shows again after searching
 	document.querySelector('.similar-shows').style.display = 'block';
 
 	// Render currernt show details in the header
 	let header = document.querySelector('.header');
-
 	header.style.background = `linear-gradient(180deg, rgba(0,0,0,1) 8%, rgba(34,30,143,0.2595413165266106) 100%), url('${currentShowBackgroundUrl}') top/cover `;
 
+	// Setting poster of the current show
 	let showPoster = document.querySelector('#showPoster');
 	showPoster.src = show.image.original;
 
+	// Setting name of the current show
 	let showName = document.querySelector('#showName');
 	showName.textContent = show.name;
 
@@ -825,7 +848,7 @@ function renderShows(showList, allShowsList) {
 		for (let j = 0; j < showList[i].genres.length; j++) {
 			let genre = document.createElement('span');
 			genre.textContent = showList[i].genres[j];
-			genre.className = 'genre-tag';
+			genre.className = 'genre-tag-searching-result';
 			genres.append(genre);
 		}
 

@@ -123,16 +123,30 @@ input:focus-visible {
 .top-line {
 	background-color: #03060f;
 }
+
 .top-line .container {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	height: 90px;
+	min-height: 90px;
+}
+
+@media (max-width: 1200px) {
+	.top-line .container {
+		flex-direction: column;
+		padding: 20px 0;
+	}
 }
 
 nav {
 	display: flex;
+}
+
+@media (max-width: 1200px) {
+	nav {
+		flex-direction: column;
+	}
 }
 
 .showSearch {
@@ -149,6 +163,55 @@ nav {
 
 .showSearch::placeholder {
 	color: rgb(219, 219, 219);
+}
+
+@media (max-width: 1200px) {
+	.showSearch {
+		display: none;
+	}
+}
+
+#burgerMenuIcon {
+	display: none;
+}
+
+@media (max-width: 1200px) {
+	#burgerMenuIcon {
+		display: block;
+		position: absolute;
+		top: 30px;
+		right: 30px;
+		font-size: 30px;
+		cursor: pointer;
+		z-index: 15;
+	}
+}
+
+.dark-color {
+	color: #03060f;
+}
+
+@media (max-width: 1200px) {
+	.side-menu {
+		color: rgb(4, 24, 39);
+		padding: 100px 30px;
+		z-index: 10;
+		position: fixed;
+		height: 100%;
+		width: 290px;
+		background-color: #fff;
+		top: 0;
+		right: 0px;
+		transition: all 0.2s ease 0s;
+		transform: translate(100%, 0px);
+	}
+
+	.side-menu-opened {
+		right: 0px;
+		transition: left 0.2s;
+		transform: translate(0px, 0px);
+		transition: all 0.2s ease 0s;
+	}
 }
 
 /* ------------------------------------ Slider ----------------------------------- */
@@ -249,13 +312,41 @@ nav {
 	list-style-type: none;
 }
 
+@media (max-width: 1200px) {
+	.main-menu {
+		flex-direction: column;
+		padding: 0;
+		text-align: center;
+	}
+}
+
 .menu-item {
 	margin: 0 40px;
-
 }
 
 .menu-item:hover {
-	color:rgb(20, 233, 159)
+	color: rgb(20, 233, 159);
+}
+
+.menu-item-search {
+	display: none;
+}
+
+@media (max-width: 1200px) {
+	.menu-item {
+		margin: 0;
+		width: 100%;
+		margin: 30px 0;
+		font-size: 20px;
+		font-weight: bold;
+	}
+}
+
+@media (max-width: 1200px) {
+	.menu-item-search {
+		display: block;
+		color: #329e78
+	}
 }
 
 .menu-link {
@@ -264,7 +355,6 @@ nav {
 }
 .show-info-wrap {
 	padding: 100px 0;
-
 }
 .show-info {
 	display: flex;
@@ -294,8 +384,10 @@ nav {
 	cursor: pointer;
 }
 
-
-
+.genre-tag-searching-result {
+	color: var(--main-accent);
+	margin-right: 10px;
+}
 
 .show-poster-box {
 	flex-shrink: 0;
@@ -847,10 +939,9 @@ nav {
 	color: white;
 }
 
-
 /* Breadcrumbs */
 
 #breadCrumbs {
 	margin-bottom: 50px;
-	color:rgb(175, 175, 175)
+	color: rgb(175, 175, 175);
 }

@@ -15,20 +15,28 @@
 
 <body>
 	<section class="header">
+
 		<div class="top-line">
 			<div class="container">
 				<div>
 					<img src="logo.png" alt="" id="logo">
 				</div>
-				<nav>
-					<ul class="main-menu">
-						<li class="menu-item"><a href="#" class="menu-link">About</a></li>
-						<li class="menu-item"><a href="#" class="menu-link">TV-Shows</a></li>
-						<li class="menu-item"><a href="#" class="menu-link">Contacts</a></li>
-					</ul>
-					<input type="text" class="showSearch" id="mainTopSearch" placeholder="Search TV-Show here">
-				</nav>
+				<div id="burgerMenuIcon">
+					<i class="fa fa-bars" aria-hidden="true"></i>
+				</div>
+				<div class="side-menu">
+					<nav>
+						<ul class="main-menu">
+							<li class="menu-item"><a href="https://syllabus.codeyourfuture.io/js-core-3/tv-show-dom-project/readme" class="menu-link" target="_blank">About</a></li>
+							<li class="menu-item"><a href="#" class="menu-link" id="tvShowsLinkMenu">TV-Shows</a></li>
+							<li class="menu-item"><a href="https://github.com/zhkvivan" class="menu-link" target="_blank">Contacts</a></li>
+							<li class="menu-item menu-item-search"><a href="#" class="menu-link">Search</a></li>
+						</ul>
+						<input type="text" class="showSearch" id="mainTopSearch" placeholder="Search TV-Show here">
+					</nav>
+				</div>
 			</div>
+
 		</div>
 		<div class="slider-wrap">
 			<div class="slider">
@@ -114,7 +122,7 @@
 
 		</div>
 		<div class="container">
-			
+
 			<div class="show-info-wrap">
 				<div class="show-info">
 					<div class="show-poster-box"><img src="" alt="" id='showPoster'></div>
@@ -130,7 +138,7 @@
 								<i class="fa fa-arrow-down" aria-hidden="true"></i>
 							</button>
 						</div>
-	
+
 					</div>
 				</div>
 
@@ -228,7 +236,7 @@
 					<button class="button" id="clearFilterBtn">Clear all filters</button>
 				</div>
 				<div class="content-inner">
-					
+
 				</div>
 			</div>
 		</div>
@@ -244,6 +252,8 @@
 	<!-- Loads YOUR javascript code -->
 	<script src="script.js"></script>
 	<script src="slider.js"></script>
+	<script src="side-menu.js"></script>
+
 	<script src="sticky-sidebar.js"></script>
 
 
