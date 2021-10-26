@@ -405,6 +405,7 @@ nav {
 
 .show-name-wrap {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 30px;
@@ -488,7 +489,7 @@ nav {
 
 .similar-shows-wrapper {
 	display: flex;
-	margin: 0 -27.166px;
+	/* margin: 0 -27.166px; */
 	margin-top: 20px;
 	justify-content: space-between;
 }
@@ -496,7 +497,7 @@ nav {
 .similar-shows-item {
 	display: flex;
 	flex-direction: column;
-	margin: 0 27.166px;
+	/* margin: 0 27.166px; */
 	cursor: pointer;
 }
 
@@ -529,7 +530,7 @@ nav {
 		display: none;
 	}
 	.similar-shows-wrapper {
-		justify-content: center;
+		justify-content: space-around;
 	}
 }
 
@@ -807,6 +808,7 @@ nav {
 	color: white;
 	line-height: 25px;
 	margin: 16px 0;
+	word-break: break-word
 }
 
 .episode-selector {
