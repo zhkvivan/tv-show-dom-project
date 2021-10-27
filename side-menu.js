@@ -15,6 +15,7 @@ burgerMenuIcon.addEventListener('click', () => {
 		}
 		burgerMenuIcon.style.position = 'absolute';
 
+
 	}
 	// Open-close state
 	sideMenu.classList.toggle('side-menu-opened');
@@ -46,3 +47,20 @@ filterSideBtn.addEventListener('click', () => {
 	// Creating filterSideBtn movement:
 	filterSideBtn.classList.toggle('filter-side-btn-active');
 });
+
+
+// Modal bg for side menus:
+	document.querySelector('.modal-bg').addEventListener('click', () => {
+		document.querySelector('.side-menu').classList.remove('side-menu-opened');
+		burgerMenuIcon.querySelector('i').classList.remove('fa-times');
+		burgerMenuIcon.querySelector('i').classList.add('fa-bars');
+		burgerMenuIcon.classList.remove('dark-color');
+		burgerMenuIcon.style.position = 'absolute';
+
+		//filter menu
+		sideFilter.classList.remove('main-filter-active');
+		filterSideBtn.classList.remove('filter-side-btn-active');
+
+		// Hiding modal bg
+		document.querySelector('.modal-bg').classList.add('modal-bg-d-none');
+	});
