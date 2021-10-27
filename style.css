@@ -180,7 +180,7 @@ nav {
 		display: block;
 		position: absolute;
 		top: 30px;
-		right: 30px;
+		left: 30px;
 		font-size: 30px;
 		cursor: pointer;
 		z-index: 15;
@@ -201,9 +201,9 @@ nav {
 		width: 290px;
 		background-color: #fff;
 		top: 0;
-		right: 0px;
+		left: 0px;
 		transition: all 0.2s ease 0s;
-		transform: translate(100%, 0px);
+		transform: translate(-100%, 0px);
 	}
 
 	.side-menu-opened {
@@ -587,9 +587,16 @@ nav {
 	background-color: #141925;
 }
 
+#content .container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
 .content-wrapper {
 	display: flex;
-	justify-content: flex-startf;
+	justify-content: flex-start;
+	position: relative;
 }
 
 .main-filter h2 {
@@ -676,8 +683,54 @@ nav {
 
 @media (max-width: 1420px) {
 	.main-filter {
-	height: 1450px;
+		height: 1450px;
+	}
+}
 
+@media (max-width: 1000px) {
+	.main-filter {
+		transform: translate(100%, 0);
+		position: fixed;
+		left: auto;
+		right: -35px;
+
+		transition: all 0.2s ease 0s;
+		height: 1180px;
+	}
+	.main-filter-active {
+		transform: translate(0, 0);
+	}
+}
+
+
+
+.filter-side-btn {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: #fff;
+	color: rgb(13, 156, 113);
+	position: sticky;
+	top: 91vh;
+	z-index: 10;
+	text-align: right;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	transition: all 0.2s ease 0s;
+
+	right: 50px;
+}
+
+.filter-side-btn-active {
+	right: 350px;
+	transition: all 0.2s ease 0s;
+}
+
+@media (min-width: 1000px) {
+	.filter-side-btn {
+		display: none;
 	}
 }
 

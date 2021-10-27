@@ -26,7 +26,7 @@ document.addEventListener(
 				if (asideTop < startScroll) {
 					aside.style.top = asideTop + currPos - window.scrollY + 'px';
 				} else if (asideTop >= startScroll && asideTop != startScroll) {
-					aside.style.top = startScroll + 20 +  'px';
+					aside.style.top = startScroll + 0 +  'px';
 				}
 			} else {
 				//scroll down
