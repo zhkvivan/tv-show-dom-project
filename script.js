@@ -34,6 +34,20 @@ let arr_EN = [
 let allShowsForRender = prepareShowListArr(allShows);
 
 function makeHomePage() {
+	// Modal bg for side menus:
+	document.querySelector('.modal-bg').addEventListener('click', () => {
+		document.querySelector('.side-menu').classList.remove('side-menu-opened');
+		burgerMenuIcon.querySelector('i').classList.remove('fa-times');
+		burgerMenuIcon.querySelector('i').classList.add('fa-bars');
+		burgerMenuIcon.classList.remove('dark-color');
+		//filter menu
+		sideFilter.classList.remove('main-filter-active');
+		filterSideBtn.classList.remove('filter-side-btn-active');
+
+		// Hiding modal bg
+		document.querySelector('.modal-bg').classList.add('modal-bg-d-none');
+	});
+
 	// Setting logo. When click on logo, it's 'refreshing' the page
 	logo.addEventListener('click', () => {
 		document.querySelector('.show-info-wrap').style.display = 'none';
