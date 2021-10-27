@@ -893,18 +893,18 @@ function renderShows(showList, allShowsList) {
 			makePageForSelectedShow(showList[i].id, allShowsList);
 		});
 
-		// Making hover effect
-		show.addEventListener('mouseenter', () => {
-			// whatchButton.style.display = 'inline';
-			// show.style.background =
-			// 	'linear-gradient(180deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
-			show.classList.toggle('show-background');
-		});
-		show.addEventListener('mouseleave', () => {
-			// whatchButton.style.display = 'none';
-			// show.style.background = 'none';
-			show.classList.toggle('show-background');
-		});
+		// // Making hover effect
+		// show.addEventListener('mouseenter', () => {
+		// 	// whatchButton.style.display = 'inline';
+		// 	// show.style.background =
+		// 	// 	'linear-gradient(180deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
+		// 	show.classList.toggle('show-background');
+		// });
+		// show.addEventListener('mouseleave', () => {
+		// 	// whatchButton.style.display = 'none';
+		// 	// show.style.background = 'none';
+		// 	show.classList.toggle('show-background');
+		// });
 	}
 }
 

@@ -345,7 +345,7 @@ nav {
 @media (max-width: 1200px) {
 	.menu-item-search {
 		display: block;
-		color: #329e78
+		color: #329e78;
 	}
 }
 
@@ -370,13 +370,9 @@ nav {
 	padding-right: 10px;
 }
 
-.show-background {
-	background: linear-gradient(180deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%);
-}
-
-@media (max-width: 1050px) {
-	.show-background {
-	background: none;
+@media (min-width: 1050px) {
+	.content-item:hover {
+		background: linear-gradient(180deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%);
 	}
 }
 
@@ -827,7 +823,7 @@ nav {
 	color: white;
 	line-height: 25px;
 	margin: 16px 0;
-	word-break: break-word
+	word-break: break-word;
 }
 
 .episode-selector {
