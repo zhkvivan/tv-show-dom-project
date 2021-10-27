@@ -366,10 +366,22 @@ nav {
 	justify-content: space-between;
 	align-items: start;
 	max-width: 780px;
+	/* margin: 50px 0; */
+	padding-right: 10px;
+}
+
+.show-background {
+	background: linear-gradient(180deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%);
+}
+
+@media (max-width: 1050px) {
+	.show-background {
+	background: none;
+	}
 }
 
 .more-button {
-	display: none;
+	/* display: none; */
 	margin-bottom: 30px;
 }
 
@@ -382,6 +394,11 @@ nav {
 	color: var(--main-accent);
 	margin-right: 10px;
 	cursor: pointer;
+}
+
+.list-of-genres-near-name {
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .genre-tag-searching-result {
@@ -408,7 +425,7 @@ nav {
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 }
 
 .status-rating-runtime span {
@@ -781,12 +798,14 @@ nav {
 .content-item {
 	display: flex;
 	margin: 30px 0;
-	border-bottom: 1px solid rgb(36, 49, 55);
+	border-top: 1px solid rgb(36, 49, 55);
 }
 
 .content-item .show-poster-box {
-	width: 220px;
-	height: 300px;
+	/* width: 220px; */
+	width: 250px;
+
+	height: 350px;
 	margin-right: 60px;
 	cursor: pointer;
 }

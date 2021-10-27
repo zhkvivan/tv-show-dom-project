@@ -39,11 +39,9 @@ function makeHomePage() {
 		document.querySelector('.show-info-wrap').style.display = 'none';
 		filter.style.display = 'none';
 		root.style.display = 'none';
-		document.querySelector('.slider-wrap').style.display = 'block'
+		document.querySelector('.slider-wrap').style.display = 'block';
 		content.style.display = 'block';
-	})
-
-	
+	});
 
 	let showInfo = document.querySelector('.show-info-wrap');
 	showInfo.style.display = 'none';
@@ -206,11 +204,8 @@ function makeHomePage() {
 			});
 		}
 
-		
-
 		// Create Genres filter
 		function buildGenresFilter() {
-
 			// Getting all the genres from all tv shows and creating array with all genres
 			let allGenresArr = [];
 			allShows.forEach((show) => {
@@ -261,16 +256,16 @@ function makeHomePage() {
 			section = ''; // reset char
 			searchString = ''; // reset var for search string
 			showSearchInput.value = ''; // reset search input itself
-			document.querySelectorAll('.alphabet-item').forEach(item => {
+			document.querySelectorAll('.alphabet-item').forEach((item) => {
 				item.style.background = '#0c142b';
 				item.querySelector('.alphabet-letter').style.color = '#5cb9ff';
-			})
+			});
 			currentGenre = [];
-			document.querySelectorAll('.genre-filter').forEach(genre => {
+			document.querySelectorAll('.genre-filter').forEach((genre) => {
 				genre.style.color = '#5cb9fe';
 			});
 			showSearch();
-		})
+		});
 	}
 
 	renderShows(allShowsForRender, allShows);
@@ -296,8 +291,6 @@ function makeHomePage() {
 
 		document.querySelector('#content').style.display = 'block';
 
-
-
 		showSearchInput.value = e.target.value;
 		updateSearchString(e);
 	});
@@ -319,8 +312,6 @@ function makeHomePage() {
 		} else showSearch();
 	});
 }
-
-
 
 function showSearch() {
 	let searchResultArray = [];
@@ -389,7 +380,7 @@ function showSearch() {
 
 	// Dynamic update number of shows on each letter
 	document.querySelectorAll('.alphabet-item').forEach((item) => {
-		let numberOfShowsOnCurrentLetter = searchResultArray.filter(show => {
+		let numberOfShowsOnCurrentLetter = searchResultArray.filter((show) => {
 			let nameArr = Array.from(show.name);
 			if (item.querySelector('.alphabet-letter').textContent == '0-9') {
 				let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -407,8 +398,7 @@ function showSearch() {
 					return show;
 				}
 			}
-		})
-		
+		});
 
 		item.querySelector('.alphabet-number').textContent =
 			numberOfShowsOnCurrentLetter.length;
@@ -422,9 +412,9 @@ function renderCurrentShow(show, currentShowBackgroundUrl) {
 
 	// Clearing the array with the selected genres for search and making all of the genres in filter section defaut colored:
 	currentGenre = [];
-	document.querySelectorAll('.genre-filter').forEach(genre => {
+	document.querySelectorAll('.genre-filter').forEach((genre) => {
 		genre.style.color = '#5cb9fe';
-	})
+	});
 
 	// Showing similar shows again after searching
 	document.querySelector('.similar-shows').style.display = 'block';
@@ -795,6 +785,7 @@ function prepareShowListArr(showList) {
 	return newArr;
 }
 
+// This function renders list of show that is being passed as 'showList' arument.
 function renderShows(showList, allShowsList) {
 	let contentInner = document.querySelector('.content-inner');
 
@@ -833,7 +824,6 @@ function renderShows(showList, allShowsList) {
 		showNameWrap.className = 'show-name-wrap';
 		showInfoInner.append(showNameWrap);
 
-
 		let showName = document.createElement('h2');
 		showName.className = 'show-name';
 		showName.textContent = showList[i].name;
@@ -843,6 +833,7 @@ function renderShows(showList, allShowsList) {
 		});
 
 		let genres = document.createElement('div');
+		genres.className = 'list-of-genres-near-name';
 		showNameWrap.append(genres);
 		genres.textContent = '';
 		for (let j = 0; j < showList[i].genres.length; j++) {
@@ -859,7 +850,7 @@ function renderShows(showList, allShowsList) {
 		let status = document.createElement('span');
 		status.className = 'show-status';
 		status.textContent = 'Status: ' + showList[i].status;
-		statusRatingRuntime.append(status)
+		statusRatingRuntime.append(status);
 
 		let rating = document.createElement('span');
 		rating.className = 'show-rating';
@@ -868,12 +859,10 @@ function renderShows(showList, allShowsList) {
 
 		if (!(showList[i].runtime == null)) {
 			let runtime = document.createElement('span');
-		runtime.className = 'show-runtime';
-		runtime.textContent = 'Runtime: ' + showList[i].runtime + ' min';
-		statusRatingRuntime.append(runtime);
+			runtime.className = 'show-runtime';
+			runtime.textContent = 'Runtime: ' + showList[i].runtime + ' min';
+			statusRatingRuntime.append(runtime);
 		}
-		
-
 
 		let showSummary = document.createElement('div');
 		showSummary.className = 'show-summary';
@@ -906,13 +895,15 @@ function renderShows(showList, allShowsList) {
 
 		// Making hover effect
 		show.addEventListener('mouseenter', () => {
-			whatchButton.style.display = 'inline';
-			show.style.background =
-				'linear-gradient(90deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
+			// whatchButton.style.display = 'inline';
+			// show.style.background =
+			// 	'linear-gradient(180deg, rgb(37, 43, 56), rgb(20, 25, 37) 100%)';
+			show.classList.toggle('show-background');
 		});
 		show.addEventListener('mouseleave', () => {
-			whatchButton.style.display = 'none';
-			show.style.background = 'none';
+			// whatchButton.style.display = 'none';
+			// show.style.background = 'none';
+			show.classList.toggle('show-background');
 		});
 	}
 }
@@ -984,7 +975,6 @@ function makePageForSelectedShow(showId, allShows) {
 		}
 	);
 }
-
 
 const backgroundImages = [
 	{
