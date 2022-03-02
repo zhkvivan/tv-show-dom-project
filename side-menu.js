@@ -50,7 +50,7 @@ filterSideBtn.addEventListener('click', () => {
 
 
 // Modal bg for side menus:
-	document.querySelector('.modal-bg').addEventListener('click', () => {
+	modalBg.addEventListener('click', () => {
 		document.querySelector('.side-menu').classList.remove('side-menu-opened');
 		burgerMenuIcon.querySelector('i').classList.remove('fa-times');
 		burgerMenuIcon.querySelector('i').classList.add('fa-bars');

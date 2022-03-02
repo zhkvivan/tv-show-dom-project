@@ -383,23 +383,15 @@ nav {
 }
 .show-info-wrap {
 	padding: 100px 0;
-}
-.show-info {
-	display: flex;
+	min-height: 700px;
 }
 
 .show-info-content {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: start;
-	max-width: 780px;
-	/* margin: 50px 0; */
 	padding-right: 10px;
 }
 
 @media (max-width: 560px) {
-	.show-info-content {
+	.content-item .show-info-content {
 		width: 310px;
 	}
 }
@@ -443,7 +435,9 @@ nav {
 	height: 441px;
 	overflow: hidden;
 	margin-right: 5%;
+	float: left;
 }
+
 #showPoster {
 	object-fit: cover;
 	object-position: center;
@@ -464,7 +458,6 @@ nav {
 	color: #939aaa;
 }
 
-
 @media (max-width: 770px) {
 	.status-rating-runtime {
 		display: flex;
@@ -476,7 +469,7 @@ nav {
 }
 
 #showSummary {
-	max-width: 900px;
+	max-width: 97%;
 	line-height: 25px;
 	font-size: 17px;
 }

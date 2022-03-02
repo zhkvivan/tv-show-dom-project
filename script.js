@@ -34,11 +34,10 @@ let arr_EN = [
 let allShowsForRender = prepareShowListArr(allShows);
 
 function makeHomePage() {
-	
-
 	// Setting logo. When click on logo, it's 'refreshing' the page
 	logo.addEventListener('click', () => {
 		document.querySelector('.show-info-wrap').style.display = 'none';
+
 		filter.style.display = 'none';
 		root.style.display = 'none';
 		document.querySelector('.slider-wrap').style.display = 'block';
@@ -288,6 +287,7 @@ function makeHomePage() {
 		document.querySelector('.similar-shows').style.display = 'none';
 		document.querySelector('.header').style.minHeight = 'unset';
 		document.querySelector('.show-info-wrap').style.display = 'none';
+
 		document.querySelector('#filter').style.display = 'none';
 		document.querySelector('#root').style.display = 'none';
 
@@ -466,6 +466,59 @@ function renderCurrentShow(show, currentShowBackgroundUrl) {
 	btn.addEventListener('click', () => {
 		filter.scrollIntoView(true);
 	});
+
+	// вычисление высоты контейнера для флоата
+
+	function floatRight() {
+		let container = document.querySelector('.show-info-content');
+		// console.log(container.offsetHeight);
+		if (
+			container.offsetHeight >
+			document.querySelector('.show-poster-box').offsetHeight
+		) {
+			document.querySelector('.show-poster-box').style.float = 'right';
+			document.querySelector('.show-poster-box').style.marginRight = '0';
+			document.querySelector('.show-poster-box').style.marginLeft = '5%';
+		}
+		if (
+			container.offsetHeight <
+			document.querySelector('.show-poster-box').offsetHeight
+		) {
+			document.querySelector('.show-poster-box').style.float = 'left';
+			document.querySelector('.show-poster-box').style.marginRight = '5%';
+			document.querySelector('.show-poster-box').style.marginLeft = '0';
+		}
+	}
+	floatRight();
+
+	function ajustH1() {
+		let genres = document
+			.querySelector('.show-info-content')
+			.querySelector('.genres');
+
+		let img = document.querySelector('.show-poster-box');
+		if (
+			showName.offsetHeight >= img.offsetHeight ||
+			genres.offsetHeight + showName.offsetHeight + 60 >= img.offsetHeight
+		) {
+			img.style.float = 'unset';
+			img.style.margin = '0';
+			img.style.position = 'absolute';
+			img.style.top = '90px';
+			img.style.left = '0';
+			img.style.width = '100%';
+			img.style.height =
+				document.querySelector('.header').offsetHeight - 90 + 'px';
+			console.log('object');
+		} else {
+		}
+	}
+	ajustH1();
+
+	window.onresize = function () {
+		floatRight();
+		ajustH1();
+	};
 }
 
 function makePageForEpisodes(episodeList) {
@@ -787,7 +840,7 @@ function prepareShowListArr(showList) {
 	return newArr;
 }
 
-// This function renders list of show that is being passed as 'showList' arument.
+// This function renders list of show that is being passed as 'showList' argument.
 function renderShows(showList, allShowsList) {
 	let contentInner = document.querySelector('.content-inner');
 
